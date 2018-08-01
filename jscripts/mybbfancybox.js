@@ -22,22 +22,20 @@ $(document).ready(function() {
 		SHARE : 'Share',
 		ZOOM : 'Zoom'
 };
-	// FancyBox settings
+	// FancyBox default settings
 	$('[data-fancybox]').fancybox({
 		slideClass : '', // CSS class
 		loop : true, // Enable infinite gallery navigation
 		protect: true, // Disable right-click and use simple image protection for images
-		thumbs : { // Thumbnails sidebox option
-	    autoStart   : false, // Show/hide sidebar with thumbnails of images
-	    hideOnClose : true, // Automatically hide thumbnails box on close
-		}
 		keyboard: true, // Enable keyboard navigation
 		arrows: true, // Display navigation arrows at the screen edges
 		infobar: true, // Should display counter at the top left corner
-
-	  },
+		thumbs : { // Thumbnails sidebox option
+	    autoStart   : false, // Show/hide sidebar with thumbnails of images
+	    hideOnClose : true, // Automatically hide thumbnails box on close
+		},
 		
-		buttons : [ //Buttons displayed in FancyBox
+		buttons : [ //Buttons displayed in FancyBox - to hide any of them just comment them out
 			'slideShow', // Slideshow button
 			'fullScreen', // Full screen button
 			'thumbs', // Thumbnails button
