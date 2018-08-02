@@ -92,7 +92,7 @@ function mybbfancybox_deactivate()
 	{
 	require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
 		// Revert changes postbit_attachments_thumbnails_thumbnail template
-		find_replace_templatesets('postbit_attachments_thumbnails_thumbnail', '#^(.*?)$#s', 'TEST');
+		find_replace_templatesets('postbit_attachments_thumbnails_thumbnail', '#^(.*?)$#s', '<a href="attachment.php?aid={$attachment[\'aid\']}" target="_blank"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13;{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13;{$attachdate}" /></a>&nbsp;&nbsp;&nbsp;');
 		// Revert changes in headerinclude template
 		find_replace_templatesets("headerinclude", "#" . preg_quote('{$stylesheets}<link rel="stylesheet" href="/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /><script type="text/javascript" src="/jscripts/fancybox/jquery.fancybox.min.js"></script><script type="text/javascript" src="/jscripts/mybbfancybox.js"></script>') . "#i",'{$stylesheets}');
 	}
