@@ -1,0 +1,22 @@
+/** MyBB FancyBox Plugin CSS **/
+/** MyBB FancyBox - image browser **/
+.fancybox-caption {
+	text-align: left
+}
+
+/* WIP - watermark support will be added later
+/** MyBB FancyBox - watermark **/
+.fancybox-slide.watermark .fancybox-spaceball {
+	background-image: url('/images/watermark.png');
+	background-size: 300px 70px;
+	background-position: bottom right;
+	background-repeat: no-repeat;
+	opacity: 0.50;
+}
+
+/** FancyBox - watermark - hide while scaling (zooming in/out) **/
+.fancybox-is-scaling .fancybox-spaceball {
+	background-image: none !important;
+}
+
+	
