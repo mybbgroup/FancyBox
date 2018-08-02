@@ -13,7 +13,7 @@ $(document).ready(function() {
 		CLOSE : 'Close',
 		NEXT : 'Next',
 		PREV : 'Previous',
-		ERROR : 'The requested content cannot be loaded. <br/> Please try again later.',
+		ERROR : 'The requested content cannot be loaded.<br/>Please try again later.',
 		PLAY_START : 'Start slideshow',
 		PLAY_STOP : 'Pause slideshow',
 		FULL_SCREEN : 'Full screen',
@@ -24,7 +24,7 @@ $(document).ready(function() {
 };
 	// FancyBox default settings
 	$('[data-fancybox]').fancybox({
-		slideClass : '', // CSS class
+		slideClass : '', // Watermark CSS class (leave empty or use "watermark")
 		loop : true, // Enable infinite gallery navigation
 		protect: true, // Disable right-click and use simple image protection for images
 		keyboard: true, // Enable keyboard navigation

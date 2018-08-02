@@ -59,7 +59,6 @@ function mybbfancybox_install()
 {
 	global $db;
     require_once(MYBB_ROOT."admin/inc/functions_themes.php");
-
     // Add stylesheet to the master template so it becomes inherited
 	$stylesheet = @file_get_contents(MYBB_ROOT.'inc/plugins/mybbfancybox/mybbfancybox.css');
 	$myplugin_stylesheet = array(
@@ -73,8 +72,6 @@ function mybbfancybox_install()
 	$db->insert_query('themestylesheets', $stylesheet);
 	cache_stylesheet(1, "mybbfancybox.css", $stylesheet);
 	update_theme_stylesheet_list("1");
-	
-	
 }
 // Plugin activation
 function mybbfancybox_activate()
@@ -102,7 +99,6 @@ function mybbfancybox_uninstall()
 {
 	global $db;
     require_once(MYBB_ROOT."admin/inc/functions_themes.php");
-
     // Remove mybbfancybox.css from the theme cache directories if it exists
 	$query = $db->simple_select("themes", "tid");
 	while($tid = $db->fetch_field($query, "tid"))
