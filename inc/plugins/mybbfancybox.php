@@ -40,6 +40,11 @@ if(!defined("IN_MYBB"))
 	die("Direct initialization of this file is not allowed.");
 }
 
+// Check PluginLibrary first
+if (!defined("PLUGINLIBRARY"))
+{
+	define("PLUGINLIBRARY", MYBB_ROOT."inc/plugins/pluginlibrary.php");
+}
 // Plugin information
 function mybbfancybox_info()
 {
@@ -49,30 +54,78 @@ function mybbfancybox_info()
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"author"		=> "MyBB Group (Eldenroot & effone)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "0.1",
+		"version"		=> "0.2",
 		"codename"		=> "",
 		"compatibility" => "18*"
 	);
 }
-
+// Plugin installation
+function mybbfancybox_install()
+{}
 // Plugin activation
 function mybbfancybox_activate()
-{
-require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
+	// Apply template changes
+	{
+	require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
+		// Apply required changes in postbit_attachments_thumbnails_thumbnail template
+		find_replace_templatesets("postbit_attachments_thumbnails_thumbnail","#" . preg_quote('<a href="attachment.php?aid={$attachment[\'aid\']}" target="_blank"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13;{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13;{$attachdate}" /></a>&nbsp;&nbsp;&nbsp;') . "#i",'<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>Filename:</b> {$attachment[\'filename\']} - <b>Size:</b> {$attachment[\'filesize\']} - <b>Uploaded:</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="Filename: {$attachment[\'filename\']}&#13Size: {$attachment[\'filesize\']}&#13Views: {$attachment[\'downloads\']}x &#13Uploaded: {$attachdate}" /></a>&nbsp;&nbsp;&nbsp;');
+		// Apply required changes in headerinclude template
+		find_replace_templatesets("headerinclude","#" . preg_quote('{$stylesheets}') . "#i",'{$stylesheets}<link rel="stylesheet" href="/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /><script type="text/javascript" src="/jscripts/fancybox/jquery.fancybox.min.js"></script><script type="text/javascript" src="/jscripts/mybbfancybox.js"></script>');
+	}
+	
+	// Create a new CSS stylesheet
+	// PluginLibrary check
+	if (!file_exists(PLUGINLIBRARY))
+	{
+		flash_message($lang->myalerts_pluginlibrary_missing, "error");
+		admin_redirect("index.php?module=config-plugins");
+	}
 
-	// Apply required changes in postbit_attachments_thumbnails_thumbnail template
-	find_replace_templatesets("postbit_attachments_thumbnails_thumbnail","#" . preg_quote('<a href="attachment.php?aid={$attachment[\'aid\']}" target="_blank"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13;{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13;{$attachdate}" /></a>&nbsp;&nbsp;&nbsp;') . "#i",'<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>Filename:</b> {$attachment[\'filename\']} - <b>Size:</b> {$attachment[\'filesize\']} - <b>Uploaded:</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="Filename: {$attachment[\'filename\']}&#13Size: {$attachment[\'filesize\']}&#13Views: {$attachment[\'downloads\']}x &#13Uploaded: {$attachdate}" /></a>&nbsp;&nbsp;&nbsp;');
-	// Apply required changes in headerinclude template
-	find_replace_templatesets("headerinclude","#" . preg_quote('{$stylesheets}') . "#i",'{$stylesheets}<link rel="stylesheet" href="/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /><script type="text/javascript" src="/jscripts/fancybox/jquery.fancybox.min.js"></script><script type="text/javascript" src="/jscripts/mybbfancybox.js"></script>');
-}
+	$PL or require_once PLUGINLIBRARY;
+
+	if ((int) $PL->version < 12)
+	{
+	flash_message('This plugin requires PluginLibrary 12 or newer', 'error');
+	admin_redirect('index.php?module=config-plugins');
+	}
+	// CSS stylesheet content
+	$stylesheet = 'body { background: black; }
+	/* Some more CSS... */';
+	
+	// CSS stylesheet name - mybbfancybox.css
+	$PL->stylesheet('mybbfancybox.css', $stylesheet);
 
 // Plugin deactivation
 function mybbfancybox_deactivate()
-{
-require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
+	{
+	require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
+		// Revert changes postbit_attachments_thumbnails_thumbnail template
+		find_replace_templatesets("postbit_attachments_thumbnails_thumbnail","#" . preg_quote('<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>Filename:</b> {$attachment[\'filename\']} - <b>Size:</b> {$attachment[\'filesize\']} - <b>Uploaded:</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="Filename: {$attachment[\'filename\']}&#13Size: {$attachment[\'filesize\']}&#13Views: {$attachment[\'downloads\']}x &#13Uploaded: {$attachdate}" /></a>&nbsp;&nbsp;&nbsp;') . "#i",'<a href=\"attachment.php?aid={$attachment[\'aid\']}\" target=\"_blank\"><img src=\"attachment.php?thumbnail={$attachment[\'aid\']}" class=\"attachment\" alt=\"\" title=\"{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13;{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13;{$attachdate}\" /></a>&nbsp;&nbsp;&nbsp;');
+		// Revert changes in headerinclude template
+		find_replace_templatesets("headerinclude","#" . preg_quote('{$stylesheets}<link rel="stylesheet" href="/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /><script type="text/javascript" src="/jscripts/fancybox/jquery.fancybox.min.js"></script><script type="text/javascript" src="/jscripts/mybbfancybox.js"></script>') . "#i",'{$stylesheets}');
+	}
+	// PluginLibrary check
+	if (!file_exists(PLUGINLIBRARY))
+	{
+	flash_message($lang->myalerts_pluginlibrary_missing, "error");
+	admin_redirect("index.php?module=config-plugins");
+	}
 
-	// Revert changes postbit_attachments_thumbnails_thumbnail template
-	find_replace_templatesets("postbit_attachments_thumbnails_thumbnail","#" . preg_quote('<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>Filename:</b> {$attachment[\'filename\']} - <b>Size:</b> {$attachment[\'filesize\']} - <b>Uploaded:</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="Filename: {$attachment[\'filename\']}&#13Size: {$attachment[\'filesize\']}&#13Views: {$attachment[\'downloads\']}x &#13Uploaded: {$attachdate}" /></a>&nbsp;&nbsp;&nbsp;') . "#i",'<a href=\"attachment.php?aid={$attachment[\'aid\']}\" target=\"_blank\"><img src=\"attachment.php?thumbnail={$attachment[\'aid\']}" class=\"attachment\" alt=\"\" title=\"{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13;{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13;{$attachdate}\" /></a>&nbsp;&nbsp;&nbsp;');
-	// Revert changes in headerinclude template
-	find_replace_templatesets("headerinclude","#" . preg_quote('{$stylesheets}<link rel="stylesheet" href="/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /><script type="text/javascript" src="/jscripts/fancybox/jquery.fancybox.min.js"></script><script type="text/javascript" src="/jscripts/mybbfancybox.js"></script>') . "#i",'{$stylesheets}');
+	$PL or require_once PLUGINLIBRARY;
+
+	// Deactivate CSS stylesheet - mybbfancybox.css
+	$PL->stylesheet_deactivate('mybbfancybox.css');
+
+// Plugin uninstallation
+function mybbfancybox_uninstall()
+{
+	// PluginLibrary check
+	if (!file_exists(PLUGINLIBRARY))
+	{
+	flash_message($lang->myalerts_pluginlibrary_missing, "error");
+	admin_redirect("index.php?module=config-plugins");
+	}
+	$PL or require_once PLUGINLIBRARY;
+	// Delete CSS stylesheet - mybbfancybox.css
+	$PL->stylesheet_delete('mybbfancybox.css');
 }
