@@ -54,25 +54,62 @@ function mybbfancybox_info()
 		"compatibility" => "18*"
 	);
 }
+
+function mybbfancybox_is_installed()
+{
+	global $db;
+
+	$query = $db->simple_select('themestylesheets', 'sid', "name='mybbfancybox.css'");
+	return ($db->num_rows($query) > 0);
+}
+
 // Plugin installation
 function mybbfancybox_install()
 {
-	global $db;
-    require_once(MYBB_ROOT."admin/inc/functions_themes.php");
+	global $db, $config;
+
     // Add stylesheet to the master template so it becomes inherited
 	$stylesheet = @file_get_contents(MYBB_ROOT.'inc/plugins/mybbfancybox/mybbfancybox.css');
-	$myplugin_stylesheet = array(
-		'sid' => NULL,
-		'name' => 'mybbfancybox.css',
-		'tid' => '1',
+	$attachedto = '';
+
+	$name = 'mybbfancybox.css';
+	$thisStyleSheet = array(
+		'name' => $name,
+		'tid' => 1,
+		'attachedto' => $db->escape_string($attachedto),
 		'stylesheet' => $db->escape_string($stylesheet),
-		'cachefile' => 'mybbfancybox.css',
+		'cachefile' => $name,
 		'lastmodified' => TIME_NOW,
 	);
-	$db->insert_query('themestylesheets', $stylesheet);
-	cache_stylesheet(1, "mybbfancybox.css", $stylesheet);
-	update_theme_stylesheet_list("1");
+
+	// update any children
+	$db->update_query('themestylesheets', array(
+		"attachedto" => $attachedto
+	), "name='{$name}'");
+
+	// now update/insert the master stylesheet
+	$query = $db->simple_select('themestylesheets', 'sid', "tid='1' AND name='{$name}'");
+	$sid = (int) $db->fetch_field($query, 'sid');
+
+	if ($sid) {
+		$db->update_query('themestylesheets', $thisStyleSheet, "sid='{$sid}'");
+	} else {
+		$sid = $db->insert_query('themestylesheets', $thisStyleSheet);
+		$thisStyleSheet['sid'] = (int) $sid;
+	}
+
+	// now cache the actual files
+	require_once MYBB_ROOT . "{$config['admin_dir']}/inc/functions_themes.php";
+
+	if (!cache_stylesheet(1, $thisStyleSheet['cachefile'], $stylesheet))
+	{
+		$db->update_query("themestylesheets", array('cachefile' => "css.php?stylesheet={$sid}"), "sid='{$sid}'", 1);
+	}
+
+	// and update the CSS file list
+	update_theme_stylesheet_list(1, false, true);
 }
+
 // Plugin activation
 function mybbfancybox_activate()
 	// Apply template changes
