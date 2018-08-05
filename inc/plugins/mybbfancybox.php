@@ -54,6 +54,15 @@ function mybbfancybox_info()
 		"compatibility" => "18*"
 	);
 }
+
+function mybbfancybox_is_installed()
+{
+	global $db;
+
+	$query = $db->simple_select('themestylesheets', 'sid', "name='mybbfancybox.css'");
+	return ($db->num_rows($query) > 0);
+}
+
 // Plugin installation
 function mybbfancybox_install()
 {
