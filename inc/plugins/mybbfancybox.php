@@ -98,15 +98,22 @@ function mybbfancybox_deactivate()
 function mybbfancybox_uninstall()
 {
 	global $db;
-    require_once(MYBB_ROOT."admin/inc/functions_themes.php");
-    // Remove mybbfancybox.css from the theme cache directories if it exists
-	$query = $db->simple_select("themes", "tid");
-	while($tid = $db->fetch_field($query, "tid"))
-	{
-		$css_file = MYBB_ROOT."cache/themes/theme{$tid}/mybbfancybox.css";
-		if(file_exists($css_file))
-			unlink($css_file);
+
+	$where = "name='mybbfancybox.css'";
+
+	// find the master and any children
+	$query = $db->simple_select('themestylesheets', 'tid,name', $where);
+
+	// delete them all from the server
+	while ($styleSheet = $db->fetch_array($query)) {
+		@unlink(MYBB_ROOT."cache/themes/{$styleSheet['tid']}_{$styleSheet['name']}");
+		@unlink(MYBB_ROOT."cache/themes/theme{$styleSheet['tid']}/{$styleSheet['name']}");
 	}
 
-    update_theme_stylesheet_list("1");
+	// then delete them from the database
+	$db->delete_query('themestylesheets', $where);
+
+	// now remove them from the CSS file list
+	require_once MYBB_ADMIN_DIR."inc/functions_themes.php";
+	update_theme_stylesheet_list(1, false, true);
 }
