@@ -7,7 +7,7 @@
  * @author MyBB Group - Eldenroot & effone - <eldenroot@gmail.com>
  * @copyright 2018 MyBB Group <http://mybb.group>
  * @link <https://github.com/mybbgroup/MyBB_Fancybox>
- * @version 0.1
+ * @version 0.3
  * @license GPL-3.0
  * 
  */
@@ -49,8 +49,8 @@ function mybbfancybox_info()
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"author"		=> "MyBB Group (Eldenroot & effone)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "0.2",
-		"codename"		=> "",
+		"version"		=> "0.3",
+		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
 }
@@ -82,12 +82,12 @@ function mybbfancybox_install()
 		'lastmodified' => TIME_NOW,
 	);
 
-	// update any children
+	// Update any children theme
 	$db->update_query('themestylesheets', array(
 		"attachedto" => $attachedto
 	), "name='{$name}'");
 
-	// now update/insert the master stylesheet
+	// Now update/insert the master stylesheet
 	$query = $db->simple_select('themestylesheets', 'sid', "tid='1' AND name='{$name}'");
 	$sid = (int) $db->fetch_field($query, 'sid');
 
@@ -98,7 +98,7 @@ function mybbfancybox_install()
 		$thisStyleSheet['sid'] = (int) $sid;
 	}
 
-	// now cache the actual files
+	// Now cache the actual files
 	require_once MYBB_ROOT . "{$config['admin_dir']}/inc/functions_themes.php";
 
 	if (!cache_stylesheet(1, $thisStyleSheet['cachefile'], $stylesheet))
@@ -106,7 +106,7 @@ function mybbfancybox_install()
 		$db->update_query("themestylesheets", array('cachefile' => "css.php?stylesheet={$sid}"), "sid='{$sid}'", 1);
 	}
 
-	// and update the CSS file list
+	// And update the CSS file list
 	update_theme_stylesheet_list(1, false, true);
 }
 
@@ -116,7 +116,7 @@ function mybbfancybox_activate()
 	{
 	require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
 		// Apply required changes in postbit_attachments_thumbnails_thumbnail template (delete all content and add the new one)
-		find_replace_templatesets('postbit_attachments_thumbnails_thumbnail', '#^(.*?)$#s', '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>Filename:</b> {$attachment[\'filename\']} - <b>Size:</b> {$attachment[\'filesize\']} - <b>Uploaded:</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="Filename: {$attachment[\'filename\']}&#13Size: {$attachment[\'filesize\']}&#13Views: {$attachment[\'downloads\']}x &#13Uploaded: {$attachdate}" /></a>&nbsp;&nbsp;&nbsp;');
+		find_replace_templatesets('postbit_attachments_thumbnails_thumbnail', '#^(.*?)$#s', '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>Uploaded:</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13Views: {$attachment[\'downloads\']}x &#13Uploaded: {$attachdate}" /></a>&nbsp;&nbsp;&nbsp;');
 		// Apply required changes in headerinclude template
 		find_replace_templatesets("headerinclude", "#" . preg_quote('{$stylesheets}') . "#i",'{$stylesheets}<link rel="stylesheet" href="/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /><script type="text/javascript" src="/jscripts/fancybox/jquery.fancybox.min.js"></script><script type="text/javascript" src="/jscripts/mybbfancybox.js"></script>');
 	}
@@ -138,19 +138,19 @@ function mybbfancybox_uninstall()
 
 	$where = "name='mybbfancybox.css'";
 
-	// find the master and any children
+	// Find the master and any children
 	$query = $db->simple_select('themestylesheets', 'tid,name', $where);
 
-	// delete them all from the server
+	// Delete them all from the server
 	while ($styleSheet = $db->fetch_array($query)) {
 		@unlink(MYBB_ROOT."cache/themes/{$styleSheet['tid']}_{$styleSheet['name']}");
 		@unlink(MYBB_ROOT."cache/themes/theme{$styleSheet['tid']}/{$styleSheet['name']}");
 	}
 
-	// then delete them from the database
+	// Then delete them from the database
 	$db->delete_query('themestylesheets', $where);
 
-	// now remove them from the CSS file list
+	// Now remove them from the CSS file list
 	require_once MYBB_ADMIN_DIR."inc/functions_themes.php";
 	update_theme_stylesheet_list(1, false, true);
 }

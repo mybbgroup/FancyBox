@@ -6,7 +6,7 @@
 
 /** MyBB FancyBox - watermark **/
 .fancybox-slide.watermark .fancybox-spaceball {
-	background-image: url('/inc/plugins/mybbfancybox/watermark.png');
+	background-image: url('/images/mybbfancybox/watermark.png');
 	background-size: cover;
 	background-repeat: no-repeat;
 	opacity: 0.90
