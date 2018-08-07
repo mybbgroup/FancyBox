@@ -1,4 +1,10 @@
 /** MyBB FancyBox Plugin CSS **/
+/** Scale all images **/
+.scaleimages img {
+    max-width: 60%;
+    height: auto
+}
+
 /** MyBB FancyBox - image browser **/
 .fancybox-caption {
 	text-align: left
