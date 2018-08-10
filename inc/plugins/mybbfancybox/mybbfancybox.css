@@ -1,7 +1,7 @@
 /** MyBB FancyBox Plugin CSS **/
 /** Scale all images **/
 .scaleimages img {
-    max-width: 60%;
+    max-width: 600px;
     height: auto
 }
 
