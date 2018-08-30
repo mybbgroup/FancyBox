@@ -7,7 +7,7 @@
  * @author MyBB Group - Eldenroot & effone - <eldenroot@gmail.com>
  * @copyright 2018 MyBB Group <http://mybb.group>
  * @link <https://github.com/mybbgroup/MyBB_Fancybox>
- * @version 0.4
+ * @version 0.5
  * @license GPL-3.0
  * 
  */
@@ -47,9 +47,9 @@ function mybbfancybox_info()
 		"name"			=> "MyBB FancyBox",
 		"description"	=> "FancyBox JavaScript library for presenting images in a fancy way. Fully responsive, touch-enabled and customizable.",
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"author"		=> "MyBB Group (Eldenroot & effone)",
+		"author"		=> "MyBB Group (Eldenroot)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "0.4",
+		"version"		=> "0.5",
 		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
