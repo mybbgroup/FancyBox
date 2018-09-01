@@ -1,12 +1,12 @@
 $(document).ready(function() {
-
 	$('.post_body img').each(function() {
 		var currentImage = $(this);
+		var pid = currentImage.parents('.post_body.scaleimages').attr('id');
 		if (currentImage.hasClass('smilie') == false && currentImage.parent().is('a') == false) {
-			currentImage.wrap("<a title='Click to enlarge' target='_blank' data-fancybox data-type='image' href='" + currentImage.attr("src") + "'>");
+			currentImage.wrap("<a title='Click to enlarge' target='_blank' data-fancybox='" + pid + "' data-type='image' href='" + currentImage.attr("src")  + "'>");
 		}
-  });
-  
+	});
+
 	// Language ENG 
 	$.fancybox.defaults.lang = 'en';
 	$.fancybox.defaults.i18n.en = {
@@ -43,6 +43,6 @@ $(document).ready(function() {
 			'download', // Download button
 			'zoom', // Zoom button
 			'close' // Close button
-  ]
+		]
 	});
 });

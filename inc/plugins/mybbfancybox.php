@@ -7,7 +7,7 @@
  * @author MyBB Group - Eldenroot & effone - <eldenroot@gmail.com>
  * @copyright 2018 MyBB Group <http://mybb.group>
  * @link <https://github.com/mybbgroup/MyBB_Fancybox>
- * @version 0.3
+ * @version 0.5
  * @license GPL-3.0
  * 
  */
@@ -47,9 +47,9 @@ function mybbfancybox_info()
 		"name"			=> "MyBB FancyBox",
 		"description"	=> "FancyBox JavaScript library for presenting images in a fancy way. Fully responsive, touch-enabled and customizable.",
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"author"		=> "MyBB Group (Eldenroot & effone)",
+		"author"		=> "MyBB Group (Eldenroot)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "0.3",
+		"version"		=> "0.5",
 		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
@@ -116,19 +116,23 @@ function mybbfancybox_activate()
 	{
 	require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
 		// Apply required changes in postbit_attachments_thumbnails_thumbnail template (delete all content and add the new one)
-		find_replace_templatesets('postbit_attachments_thumbnails_thumbnail', '#^(.*?)$#s', '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>Uploaded:</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13Views: {$attachment[\'downloads\']}x &#13Uploaded: {$attachdate}" /></a>&nbsp;&nbsp;&nbsp;');
+		find_replace_templatesets('postbit_attachments_thumbnails_thumbnail', '#^(.*?)$#s', '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>Uploaded:</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13Uploaded: {$attachdate}&#13Views: {$attachment[\'downloads\']}x" /></a>&nbsp;&nbsp;&nbsp;');
+		// Apply required changes in postbit_attachments_images_image template (delete all content and add the new one)
+		find_replace_templatesets('postbit_attachments_images_image', '#^(.*?)$#s', '<a target="_blank" data-fancybox="data-{$attachment[\'pid\']}" data-type="image"><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13Uploaded: {$attachdate}&#13Views: {$attachment[\'downloads\']}x" /></a>&nbsp;&nbsp;&nbsp;');
 		// Apply required changes in headerinclude template
 		find_replace_templatesets("headerinclude", "#" . preg_quote('{$stylesheets}') . "#i",'{$stylesheets}<link rel="stylesheet" href="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /><script type="text/javascript" src="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.js"></script><script type="text/javascript" src="{$mybb->asset_url}/jscripts/mybbfancybox.js"></script>');
 	}
 
-	// Plugin deactivation
+// Plugin deactivation
 function mybbfancybox_deactivate()
 	{
 	require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
 		// Revert changes postbit_attachments_thumbnails_thumbnail template
 		find_replace_templatesets('postbit_attachments_thumbnails_thumbnail', '#^(.*?)$#s', '<a href="attachment.php?aid={$attachment[\'aid\']}" target="_blank"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13;{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13;{$attachdate}" /></a>&nbsp;&nbsp;&nbsp;');
+		// Revert changes postbit_attachments_images_image template
+		find_replace_templatesets('postbit_attachments_images_image', '#^(.*?)$#s', '<img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13;{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13;{$attachdate}" />&nbsp;&nbsp;&nbsp;');
 		// Revert changes in headerinclude template
-		find_replace_templatesets("headerinclude", "#" . preg_quote('{$stylesheets}<link rel="stylesheet" href="/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /><script type="text/javascript" src="/jscripts/fancybox/jquery.fancybox.min.js"></script><script type="text/javascript" src="/jscripts/mybbfancybox.js"></script>') . "#i",'{$stylesheets}');
+		find_replace_templatesets("headerinclude", "#" . preg_quote('{$stylesheets}<link rel="stylesheet" href="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /><script type="text/javascript" src="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.js"></script><script type="text/javascript" src="{$mybb->asset_url}/jscripts/mybbfancybox.js"></script>') . "#i",'{$stylesheets}');
 	}
 
 // Plugin uninstallation
