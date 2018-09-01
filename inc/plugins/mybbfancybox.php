@@ -43,6 +43,12 @@ if(!defined("IN_MYBB"))
 // Plugin information
 function mybbfancybox_info()
 {
+	global $lang;
+
+	if (!$lang->mybbfancybox) {
+		$lang->lang('fancybox');
+	}
+
 	return array(
 		"name"			=> $lang->mybbfancybox,
 		"description"	=> $lang->mybbfancybox_description,
