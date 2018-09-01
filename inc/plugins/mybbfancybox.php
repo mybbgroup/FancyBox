@@ -146,7 +146,11 @@ if (THIS_SCRIPT == 'showthread.php') {
 
 function mybbfancybox_showthread_start()
 {
-	global $mybb, $templates, $headerinclude;
+	global $mybb, $templates, $headerinclude, $lang;
+
+	if (!$lang->mybbfancybox) {
+		$lang->load('mybbfancybox');
+	}
 
 	// Apply required changes in postbit_attachments_thumbnails_thumbnail template (replace all content)
 	$templates->cache['postbit_attachments_thumbnails_thumbnail'] = '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>{$lang->mybbfancybox_uploaded}</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13Views: {$attachment[\'downloads\']}x" /></a>&nbsp;&nbsp;&nbsp;';
@@ -160,6 +164,24 @@ function mybbfancybox_showthread_start()
 	<link rel="stylesheet" href="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" />
 	<script type="text/javascript" src="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.js"></script>
 	<script type="text/javascript" src="{$mybb->asset_url}/jscripts/mybbfancybox.js"></script>
+	<script type="text/javascript">
+	<!--
+	MyBBFancybox.setup({
+		clickToEnlarge: "{$lang->mybbfancybox_click_to_enlarge}",
+		CLOSE: "{$lang->mybbfancybox_close}",
+		NEXT: "{$lang->mybbfancybox_next}",
+		PREV: "{$lang->mybbfancybox_prev}",
+		ERROR: "{$lang->mybbfancybox_error}",
+		PLAY_START: "{$lang->mybbfancybox_play_start}",
+		PLAY_STOP: "{$lang->mybbfancybox_play_stop}",
+		FULL_SCREEN: "{$lang->mybbfancybox_full_screen}",
+		THUMBS: "{$lang->mybbfancybox_thumbs}",
+		DOWNLOAD: "{$lang->mybbfancybox_download}",
+		SHARE: "{$lang->mybbfancybox_share}",
+		ZOOM: "{$lang->mybbfancybox_zoom}",
+	});
+	// -->
+	</script>
 EOF;
 
 }
