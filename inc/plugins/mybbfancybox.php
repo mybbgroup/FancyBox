@@ -46,7 +46,7 @@ function mybbfancybox_info()
 	global $lang;
 
 	if (!$lang->mybbfancybox) {
-		$lang->lang('fancybox');
+		$lang->load('mybbfancybox');
 	}
 
 	return array(
@@ -116,31 +116,6 @@ function mybbfancybox_install()
 	update_theme_stylesheet_list(1, false, true);
 }
 
-// Plugin activation
-function mybbfancybox_activate()
-	// Apply template changes
-	{
-	require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
-		// Apply required changes in postbit_attachments_thumbnails_thumbnail template (delete all content and add the new one)
-		find_replace_templatesets('postbit_attachments_thumbnails_thumbnail', '#^(.*?)$#s', '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>{$lang->mybbfancybox_uploaded}</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13Uploaded: {$attachdate}&#13Views: {$attachment[\'downloads\']}x" /></a>&nbsp;&nbsp;&nbsp;');
-		// Apply required changes in postbit_attachments_images_image template (delete all content and add the new one)
-		find_replace_templatesets('postbit_attachments_images_image', '#^(.*?)$#s', '<a target="_blank" data-fancybox="data-{$attachment[\'pid\']}" data-type="image"><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13Uploaded: {$attachdate}&#13Views: {$attachment[\'downloads\']}x" /></a>&nbsp;&nbsp;&nbsp;');
-		// Apply required changes in headerinclude template
-		find_replace_templatesets("headerinclude", "#" . preg_quote('{$stylesheets}') . "#i",'{$stylesheets}<link rel="stylesheet" href="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /><script type="text/javascript" src="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.js"></script><script type="text/javascript" src="{$mybb->asset_url}/jscripts/mybbfancybox.js"></script>');
-	}
-
-// Plugin deactivation
-function mybbfancybox_deactivate()
-	{
-	require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
-		// Revert changes postbit_attachments_thumbnails_thumbnail template
-		find_replace_templatesets('postbit_attachments_thumbnails_thumbnail', '#^(.*?)$#s', '<a href="attachment.php?aid={$attachment[\'aid\']}" target="_blank"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13;{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13;{$attachdate}" /></a>&nbsp;&nbsp;&nbsp;');
-		// Revert changes postbit_attachments_images_image template
-		find_replace_templatesets('postbit_attachments_images_image', '#^(.*?)$#s', '<img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13;{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13;{$attachdate}" />&nbsp;&nbsp;&nbsp;');
-		// Revert changes in headerinclude template
-		find_replace_templatesets("headerinclude", "#" . preg_quote('{$stylesheets}<link rel="stylesheet" href="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /><script type="text/javascript" src="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.js"></script><script type="text/javascript" src="{$mybb->asset_url}/jscripts/mybbfancybox.js"></script>') . "#i",'{$stylesheets}');
-	}
-
 // Plugin uninstallation
 function mybbfancybox_uninstall()
 {
@@ -163,4 +138,28 @@ function mybbfancybox_uninstall()
 	// Now remove them from the CSS file list
 	require_once MYBB_ADMIN_DIR."inc/functions_themes.php";
 	update_theme_stylesheet_list(1, false, true);
+}
+
+if (THIS_SCRIPT == 'showthread.php') {
+	$plugins->add_hook('showthread_start', 'mybbfancybox_showthread_start');
+}
+
+function mybbfancybox_showthread_start()
+{
+	global $mybb, $templates, $headerinclude;
+
+	// Apply required changes in postbit_attachments_thumbnails_thumbnail template (replace all content)
+	$templates->cache['postbit_attachments_thumbnails_thumbnail'] = '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>{$lang->mybbfancybox_uploaded}</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13Views: {$attachment[\'downloads\']}x" /></a>&nbsp;&nbsp;&nbsp;';
+
+	// Apply required changes in postbit_attachments_images_image template (replace all content)
+	$templates->cache['postbit_attachments_images_image'] = '<a target="_blank" data-fancybox="data-{$attachment[\'pid\']}" data-type="image"><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13Views: {$attachment[\'downloads\']}x" /></a>&nbsp;&nbsp;&nbsp;';
+
+	$headerinclude .= <<<EOF
+
+
+	<link rel="stylesheet" href="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" />
+	<script type="text/javascript" src="{$mybb->asset_url}/jscripts/fancybox/jquery.fancybox.min.js"></script>
+	<script type="text/javascript" src="{$mybb->asset_url}/jscripts/mybbfancybox.js"></script>
+EOF;
+
 }
