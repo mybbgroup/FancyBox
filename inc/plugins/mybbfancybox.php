@@ -44,8 +44,8 @@ if(!defined("IN_MYBB"))
 function mybbfancybox_info()
 {
 	return array(
-		"name"			=> "MyBB FancyBox",
-		"description"	=> "FancyBox JavaScript library for presenting images in a fancy way. Fully responsive, touch-enabled and customizable.",
+		"name"			=> $lang->mybbfancybox,
+		"description"	=> $lang->mybbfancybox_description,
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"author"		=> "MyBB Group (Eldenroot)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
@@ -116,7 +116,7 @@ function mybbfancybox_activate()
 	{
 	require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
 		// Apply required changes in postbit_attachments_thumbnails_thumbnail template (delete all content and add the new one)
-		find_replace_templatesets('postbit_attachments_thumbnails_thumbnail', '#^(.*?)$#s', '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>Uploaded:</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13Uploaded: {$attachdate}&#13Views: {$attachment[\'downloads\']}x" /></a>&nbsp;&nbsp;&nbsp;');
+		find_replace_templatesets('postbit_attachments_thumbnails_thumbnail', '#^(.*?)$#s', '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>{$lang->mybbfancybox_uploaded}</b> {$attachdate} - <b>Views:</b> {$attachment[\'downloads\']}x"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13Uploaded: {$attachdate}&#13Views: {$attachment[\'downloads\']}x" /></a>&nbsp;&nbsp;&nbsp;');
 		// Apply required changes in postbit_attachments_images_image template (delete all content and add the new one)
 		find_replace_templatesets('postbit_attachments_images_image', '#^(.*?)$#s', '<a target="_blank" data-fancybox="data-{$attachment[\'pid\']}" data-type="image"><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13Uploaded: {$attachdate}&#13Views: {$attachment[\'downloads\']}x" /></a>&nbsp;&nbsp;&nbsp;');
 		// Apply required changes in headerinclude template
