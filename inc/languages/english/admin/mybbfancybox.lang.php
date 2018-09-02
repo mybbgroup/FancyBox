@@ -4,10 +4,9 @@
  * MyBB FancyBox - plugin for MyBB 1.8.x forum software
  * 
  * @package MyBB Plugin
- * @author MyBB Group - Eldenroot & effone - <eldenroot@gmail.com>
+ * @author MyBB Group - Eldenroot & Wildcard - <eldenroot@gmail.com>
  * @copyright 2018 MyBB Group <http://mybb.group>
  * @link <https://github.com/mybbgroup/MyBB_Fancybox>
- * @version 0.3
  * @license GPL-3.0
  * 
  */

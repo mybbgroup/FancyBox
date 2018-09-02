@@ -2,12 +2,12 @@
 /** Scale all images **/
 .scaleimages img {
     max-width: 600px;
-    height: auto
+    height: auto;
 }
 
 /** MyBB FancyBox - image browser **/
 .fancybox-caption {
-	text-align: left
+	text-align: left;
 }
 
 /** MyBB FancyBox - watermark **/
@@ -15,10 +15,10 @@
 	background-image: url('/images/mybbfancybox/watermark.png');
 	background-size: cover;
 	background-repeat: no-repeat;
-	opacity: 0.90
+	opacity: 0.90;
 }
 
 /** FancyBox - watermark - hide while scaling (zooming in/out) **/
 .fancybox-is-scaling .fancybox-spaceball {
-	background-image: none !important
+	background-image: none !important;
 }
