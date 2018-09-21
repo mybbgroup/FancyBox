@@ -54,7 +54,7 @@ function mybbfancybox_info()
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"author"		=> "MyBB Group (Eldenroot & Wildcard)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "0.6",
+		"version"		=> "0.7",
 		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
