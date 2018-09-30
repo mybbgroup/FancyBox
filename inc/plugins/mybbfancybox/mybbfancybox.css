@@ -7,7 +7,7 @@
 
 /** MyBB FancyBox - image browser **/
 .fancybox-caption {
-	text-align: left;
+	text-align: left !important;
 }
 
 /** MyBB FancyBox - watermark **/
