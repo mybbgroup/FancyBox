@@ -30,20 +30,20 @@ var MyBBFancybox = (function($, m) {
 			}
 		});
 
-		// Language ENG 
+		// Load default language ENG (English)
 		$.fancybox.defaults.lang = 'en';
 		$.fancybox.defaults.i18n.en = lang;
 
 		// FancyBox default settings
 		$('[data-fancybox]').fancybox({
-			slideClass : '', // Watermark CSS class (leave empty or use "watermark")
+			slideClass : '', // Watermark CSS class (leave empty or use "watermark" CSS class)
 			loop : true, // Enable infinite gallery navigation
 			protect: true, // Disable right-click and use simple image protection for images
 			keyboard: true, // Enable keyboard navigation
 			arrows: true, // Display navigation arrows at the screen edges
 			infobar: true, // Should display counter at the top left corner
 			thumbs : { // Thumbnails sidebox option
-			autoStart   : false, // Show/hide sidebar with thumbnails of images
+			autoStart   : false, // Show or hide sidebar with thumbnails of images
 			hideOnClose : true, // Automatically hide thumbnails box on close
 			},
 			
