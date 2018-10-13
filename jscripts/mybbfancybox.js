@@ -38,7 +38,7 @@ var MyBBFancybox = (function($, m) {
 		$('[data-fancybox]').fancybox({
 			slideClass : '', // Watermark CSS class (leave empty or use "watermark" CSS class)
 			loop : true, // Enable infinite gallery navigation
-			protect: true, // Disable right-click and use simple image protection for images
+			protect: false, // Disable right-click and use simple image protection for images
 			keyboard: true, // Enable keyboard navigation
 			arrows: true, // Display navigation arrows at the screen edges
 			infobar: true, // Should display counter at the top left corner
