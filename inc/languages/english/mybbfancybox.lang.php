@@ -14,6 +14,8 @@
 $l['mybbfancybox'] = 'MyBB Fancybox';
 
 $l['mybbfancybox_uploaded'] = 'Uploaded:';
+$l['mybbfancybox_views'] = 'Views:';
+$l['mybbfancybox_views_symbol_after'] = 'x';
 
 // JavaScript
 $l['mybbfancybox_click_to_enlarge'] = 'Click to enlarge';
