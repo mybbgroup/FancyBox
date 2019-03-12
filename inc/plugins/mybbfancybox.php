@@ -71,9 +71,13 @@ function mybbfancybox_is_installed()
 // Plugin installation
 function mybbfancybox_install()
 {
-	global $db, $config;
+	global $db, $config, $lang;
 
-    // Add stylesheet to the master template so it becomes inherited
+	if (!$lang->mybbfancybox) {
+		$lang->load('mybbfancybox');
+	}
+
+	// Add stylesheet to the master template so it becomes inherited
 	$stylesheet = @file_get_contents(MYBB_ROOT.'inc/plugins/mybbfancybox/mybbfancybox.css');
 	$attachedto = '';
 
