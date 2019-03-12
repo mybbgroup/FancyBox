@@ -129,7 +129,7 @@ function mybbfancybox_install()
 	$mybbfancybox_setting = array(
 		'name'			=> 'mybbfancybox_setting_1',
 		'title'			=> 'Open image URL links in MyBB FancyBox?',
-		'description'	=> 'Automatically open URL image links in MyBB FancyBox modal window',
+		'description'	=> 'Automatically open URL image links in posts in the MyBB FancyBox modal window',
 		'optionscode'	=> 'yesno',
 		'value'			=> '1',
 		'disporder'		=> '1',
@@ -139,8 +139,8 @@ function mybbfancybox_install()
 
 	$mybbfancybox_setting = array(
 		'name'			=> 'mybbfancybox_setting_2',
-		'title'			=> 'Allowed images extensions',
-		'description'	=> 'Image links with listened extensions will be opened in MyBB FancyBox, default extensions: .jpg, .gif, .png, .jpeg, .bmp, .apng. Separate extensions with comma without space \",\". When leave blank the default ones will be used instead.',
+		'title'			=> 'Allowed image extensions',
+		'description'	=> 'Image URL links in posts with listened extensions below will be opened in MyBB FancyBox<br />Default extensions: .jpg, .gif, .png, .jpeg, .bmp, .apng. Separate extensions with comma without space \",\". When leave blank the default ones will be used instead.',
 		'optionscode'	=> 'text',
 		'value'			=> 'jpg,jpeg,png,gif,bmp,apng',
 		'disporder'		=> '2',
@@ -235,11 +235,11 @@ if ($mybb->settings['mybbfancybox_setting_1'] == '1') {
 // If enabled, then make a black magic
 function mybbfancybox_post($message)
 {
-	// Default allowed image extension (.png, .jpg, .jpeg, .apng, .bmp)
-	$exts = array('png', 'jpg', 'jpeg', 'apng', 'bmp');
-	// Get custom allowed image extension from plugin settings
+	// Default allowed image extension (.png, .jpg, .jpeg, .apng, .bmp, .gif)
+	$exts = array('png', 'jpg', 'jpeg', 'apng', 'bmp', 'gif');
+	// Get custom allowed image extension from the plugin setting_2
 	$userExts = explode(',', $mybb->settings['mybbfancybox_setting_2'];
-	// Error check - if there is no image extension use default ones instead
+	// Error check - if there is no image extension -> use default ones instead
 	if (is_array($userExts) && !empty($userExts)) {
 		foreach ((array) $userExts as $ext) {
 			if (trim($ext)) {
@@ -247,12 +247,12 @@ function mybbfancybox_post($message)
 			}
 		}
 	}
-	// Parser for URLs
+	// Parser for URL links in posts
 	global $post;
 	$pid = $post['pid'];
 	// Search for image extension in URL link
 	$find = array('/(.*)href="(.*)(png|gif|jpeg|bmp|jpg|apng:\/\/[^ ]+)"(.*)/');
-	// Open image links in MyBB FancyBox 
+	// Open image URL link in MyBB FancyBox modal window 
 	$replace = array('$1href="$2$3" data-fancybox="data-'.$pid.'" data-type="image" data-caption=""$4');
 	$message = preg_replace($find, $replace, $message);
 	return $message;
