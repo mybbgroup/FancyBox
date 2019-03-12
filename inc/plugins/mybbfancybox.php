@@ -54,7 +54,7 @@ function mybbfancybox_info()
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"author"		=> "MyBB Group (Eldenroot & Wildcard)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "0.8.4",
+		"version"		=> "0.8.5",
 		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
@@ -113,6 +113,40 @@ function mybbfancybox_install()
 
 	// And update the CSS file list
 	update_theme_stylesheet_list(1, false, true);
+	
+	// Add plugin settings into ACP
+	// Add plugin settings group
+	$setting_group = array(
+		'name'			=> 'mybbfancybox',
+		'title'			=> 'MyBB Fancybox settings',
+		'description'	=> 'Settings for MyBB FancyBox plugin',
+		'disporder'		=> '1',
+		'isdefault'		=> 'no'
+	);
+	$db->insert_query('settinggroups', $setting_group);
+	$gid = $db->insert_id();
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_setting_1',
+		'title'			=> 'Open image URL links in MyBB FancyBox?',
+		'description'	=> 'Automatically open URL image links in MyBB FancyBox modal window',
+		'optionscode'	=> 'yesno',
+		'value'			=> '1',
+		'disporder'		=> '1',
+		'gid'			=> intval($gid)
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_setting_2',
+		'title'			=> 'Allowed images extensions',
+		'description'	=> 'Image links with listened extensions will be opened in MyBB FancyBox, default extensions: .jpg, .gif, .png, .jpeg, .bmp, .apng. Separate extensions with comma without space \",\". When leave blank the default ones will be used instead.',
+		'optionscode'	=> 'text',
+		'value'			=> 'jpg,jpeg,png,gif,bmp,apng',
+		'disporder'		=> '2',
+		'gid'			=> intval($gid)
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
 }
 
 // Plugin uninstallation
@@ -137,6 +171,13 @@ function mybbfancybox_uninstall()
 	// Now remove them from the CSS file list
 	require_once MYBB_ADMIN_DIR."inc/functions_themes.php";
 	update_theme_stylesheet_list(1, false, true);
+	
+	// Delete plugin settings in ACP
+	$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name IN ('mybbfancybox_setting_1','mybbfancybox_setting_2')");
+	$db->write_query("DELETE FROM ".TABLE_PREFIX."settinggroups WHERE name = 'mybbfancybox'");
+	
+	// Rebuild settings
+	rebuild_settings();
 }
 
 if (THIS_SCRIPT == 'showthread.php') {
@@ -183,4 +224,36 @@ function mybbfancybox_showthread_start()
 	</script>
 EOF;
 
+}
+
+// Open image URL link in posts
+// Check ACP settings
+if ($mybb->settings['mybbfancybox_setting_1'] == '1') {
+	// Add hook
+	$plugins->add_hook("parse_message_end","mybbfancybox_post");
+}
+// If enabled, then make a black magic
+function mybbfancybox_post($message)
+{
+	// Default allowed image extension (.png, .jpg, .jpeg, .apng, .bmp)
+	$exts = array('png', 'jpg', 'jpeg', 'apng', 'bmp');
+	// Get custom allowed image extension from plugin settings
+	$userExts = explode(',', $mybb->settings['mybbfancybox_setting_2'];
+	// Error check - if there is no image extension use default ones instead
+	if (is_array($userExts) && !empty($userExts)) {
+		foreach ((array) $userExts as $ext) {
+			if (trim($ext)) {
+				$exts[] = trim($ext);
+			}
+		}
+	}
+	// Parser for URLs
+	global $post;
+	$pid = $post['pid'];
+	// Search for image extension in URL link
+	$find = array('/(.*)href="(.*)(png|gif|jpeg|bmp|jpg|apng:\/\/[^ ]+)"(.*)/');
+	// Open image links in MyBB FancyBox 
+	$replace = array('$1href="$2$3" data-fancybox="data-'.$pid.'" data-type="image" data-caption=""$4');
+	$message = preg_replace($find, $replace, $message);
+	return $message;
 }
