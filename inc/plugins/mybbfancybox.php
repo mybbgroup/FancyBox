@@ -118,33 +118,33 @@ function mybbfancybox_install()
 	// Add plugin settings group
 	$setting_group = array(
 		'name'			=> 'mybbfancybox',
-		'title'			=> 'MyBB Fancybox settings',
-		'description'	=> 'Settings for MyBB FancyBox plugin',
+		'title'			=> $lang->mybbfancybox_settings_group_title,
+		'description'	=> $lang->mybbfancybox_settings_group_description,
 		'disporder'		=> '1',
 		'isdefault'		=> 'no'
 	);
 	$db->insert_query('settinggroups', $setting_group);
-	$gid = $db->insert_id();
+	$gid = (int) $db->insert_id();
 
 	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_setting_1',
-		'title'			=> 'Open image URL links in MyBB FancyBox?',
-		'description'	=> 'Automatically open URL image links in posts in the MyBB FancyBox modal window',
+		'name'			=> 'mybbfancybox_open_image_urls',
+		'title'			=> $lang->mybbfancybox_open_image_urls_title,
+		'description'	=> $lang->mybbfancybox_open_image_urls_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '1',
 		'disporder'		=> '1',
-		'gid'			=> intval($gid)
+		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_setting_2',
-		'title'			=> 'Allowed image extensions',
-		'description'	=> 'Image URL links in posts with listened extensions below will be opened in MyBB FancyBox<br />Default extensions: .jpg, .gif, .png, .jpeg, .bmp, .apng. Separate extensions with comma without space \",\". When leave blank the default ones will be used instead.',
+		'name'			=> 'mybbfancybox_allowed_extensions',
+		'title'			=> $lang->mybbfancybox_allowed_extensions_title,
+		'description'	=> $lang->mybbfancybox_allowed_extensions_description,
 		'optionscode'	=> 'text',
-		'value'			=> 'jpg,jpeg,png,gif,bmp,apng',
+		'value'			=> '',
 		'disporder'		=> '2',
-		'gid'			=> intval($gid)
+		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
 }
@@ -173,7 +173,7 @@ function mybbfancybox_uninstall()
 	update_theme_stylesheet_list(1, false, true);
 	
 	// Delete plugin settings in ACP
-	$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name IN ('mybbfancybox_setting_1','mybbfancybox_setting_2')");
+	$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name IN ('mybbfancybox_open_image_urls','mybbfancybox_allowed_extensions')");
 	$db->write_query("DELETE FROM ".TABLE_PREFIX."settinggroups WHERE name = 'mybbfancybox'");
 	
 	// Rebuild settings
@@ -228,32 +228,70 @@ EOF;
 
 // Open image URL link in posts
 // Check ACP settings
-if ($mybb->settings['mybbfancybox_setting_1'] == '1') {
+global $mybb;
+if ($mybb->settings['mybbfancybox_open_image_urls'] == '1') {
 	// Add hook
 	$plugins->add_hook("parse_message_end","mybbfancybox_post");
 }
+
 // If enabled, then make a black magic
+// ...muahahaha... -wc
 function mybbfancybox_post($message)
 {
-	// Default allowed image extension (.png, .jpg, .jpeg, .apng, .bmp, .gif)
-	$exts = array('png', 'jpg', 'jpeg', 'apng', 'bmp', 'gif');
-	// Get custom allowed image extension from the plugin setting_2
-	$userExts = explode(',', $mybb->settings['mybbfancybox_setting_2'];
-	// Error check - if there is no image extension -> use default ones instead
-	if (is_array($userExts) && !empty($userExts)) {
-		foreach ((array) $userExts as $ext) {
-			if (trim($ext)) {
-				$exts[] = trim($ext);
+	// Only parse allowed extensions once
+	static $allowedExtensions = null;
+
+	global $mybb, $post;
+
+	// If null, then it has not yet been built.
+	if ($allowedExtensions === null) {
+		// Set to an empty array so we don't try to build it again if setting is blank/errored
+		$allowedExtensions = array();
+
+		// Get all of the allowed image extensions from the plugin setting
+		$userExts = explode(',', $mybb->settings['mybbfancybox_allowed_extensions']);
+
+		// Remove all empty array elements (eg. 'jpg,,png')
+		$userExts = array_filter($userExts);
+
+		// Trim all array elements (eg. 'jpg, png, gif ,')
+		$allowedExtensions = array_map('trim', $userExts);
+	}
+
+	// Grab the allowed extensions
+	$exts = $allowedExtensions;
+	$regx = '';
+
+	// If the setting value isn't empty, use it to build a custom regular expression
+	if (is_array($exts) && !empty($exts)) {
+		// No separator for the first extension
+		$sep = '';
+		foreach ($exts as $ext) {
+			// Special case for APNG
+			if ($ext === 'apng') {
+				$regx .= $sep.'apng:\/\/[^ ]+';
+				continue;
 			}
+
+			// Add this extension to the list w/separator (if applicable)
+			$regx .= $sep.$ext;
+
+			// Add a separator after the first extension
+			$sep = '|';
 		}
 	}
-	// Parser for URL links in posts
-	global $post;
-	$pid = $post['pid'];
+
+	// Default
+	if (!$regx) {
+		$regx = 'png|gif|jpeg|bmp|jpg|apng:\/\/[^ ]+';
+	}
+
 	// Search for image extension in URL link
-	$find = array('/(.*)href="(.*)(png|gif|jpeg|bmp|jpg|apng:\/\/[^ ]+)"(.*)/');
+	$find = '/(.*)href="(.*)('.$regx.')"([^>])*?>([^<]*)?<\/a>/';
+
 	// Open image URL link in MyBB FancyBox modal window 
-	$replace = array('$1href="$2$3" data-fancybox="data-'.$pid.'" data-type="image" data-caption=""$4');
+	$replace = '$1href="$2$3" data-fancybox="data-'.$post['pid'].'" data-type="image" data-caption="$5"$4>$5</a>';
+
 	$message = preg_replace($find, $replace, $message);
 	return $message;
 }
