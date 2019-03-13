@@ -184,8 +184,23 @@ function mybbfancybox_uninstall()
 	rebuild_settings();
 }
 
-if (THIS_SCRIPT == 'showthread.php') {
-	$plugins->add_hook('showthread_start', 'mybbfancybox_showthread_start');
+mybbfancybox_init();
+
+function mybbfancybox_init()
+{
+	global $mybb, $plugins;
+
+	// Open image URL link in posts
+	// Check ACP settings
+	if ($mybb->settings['mybbfancybox_open_image_urls'] == '1') {
+		// Add hook
+		$plugins->add_hook("parse_message_end","mybbfancybox_post");
+	}
+
+	if (THIS_SCRIPT == 'showthread.php') {
+		// Add hook
+		$plugins->add_hook('showthread_start', 'mybbfancybox_showthread_start');
+	}
 }
 
 function mybbfancybox_showthread_start()
@@ -228,14 +243,6 @@ function mybbfancybox_showthread_start()
 	</script>
 EOF;
 
-}
-
-// Open image URL link in posts
-// Check ACP settings
-global $mybb;
-if ($mybb->settings['mybbfancybox_open_image_urls'] == '1') {
-	// Add hook
-	$plugins->add_hook("parse_message_end","mybbfancybox_post");
 }
 
 // If enabled, then make a black magic
