@@ -54,7 +54,7 @@ function mybbfancybox_info()
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"author"		=> "MyBB Group (Eldenroot & Wildcard)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "0.8.4",
+		"version"		=> "0.8.5",
 		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
@@ -71,9 +71,13 @@ function mybbfancybox_is_installed()
 // Plugin installation
 function mybbfancybox_install()
 {
-	global $db, $config;
+	global $db, $config, $lang;
 
-    // Add stylesheet to the master template so it becomes inherited
+	if (!$lang->mybbfancybox) {
+		$lang->load('mybbfancybox');
+	}
+
+	// Add stylesheet to the master template so it becomes inherited
 	$stylesheet = @file_get_contents(MYBB_ROOT.'inc/plugins/mybbfancybox/mybbfancybox.css');
 	$attachedto = '';
 
@@ -113,6 +117,40 @@ function mybbfancybox_install()
 
 	// And update the CSS file list
 	update_theme_stylesheet_list(1, false, true);
+	
+	// Add plugin settings into ACP
+	// Add plugin settings group
+	$setting_group = array(
+		'name'			=> 'mybbfancybox',
+		'title'			=> $lang->mybbfancybox_settings_group_title,
+		'description'	=> $lang->mybbfancybox_settings_group_description,
+		'disporder'		=> '1',
+		'isdefault'		=> 'no'
+	);
+	$db->insert_query('settinggroups', $setting_group);
+	$gid = (int) $db->insert_id();
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_open_image_urls',
+		'title'			=> $lang->mybbfancybox_open_image_urls_title,
+		'description'	=> $lang->mybbfancybox_open_image_urls_description,
+		'optionscode'	=> 'yesno',
+		'value'			=> '1',
+		'disporder'		=> '1',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_allowed_extensions',
+		'title'			=> $lang->mybbfancybox_allowed_extensions_title,
+		'description'	=> $lang->mybbfancybox_allowed_extensions_description,
+		'optionscode'	=> 'text',
+		'value'			=> '',
+		'disporder'		=> '2',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
 }
 
 // Plugin uninstallation
@@ -137,10 +175,32 @@ function mybbfancybox_uninstall()
 	// Now remove them from the CSS file list
 	require_once MYBB_ADMIN_DIR."inc/functions_themes.php";
 	update_theme_stylesheet_list(1, false, true);
+	
+	// Delete plugin settings in ACP
+	$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name IN ('mybbfancybox_open_image_urls','mybbfancybox_allowed_extensions')");
+	$db->write_query("DELETE FROM ".TABLE_PREFIX."settinggroups WHERE name = 'mybbfancybox'");
+	
+	// Rebuild settings
+	rebuild_settings();
 }
 
-if (THIS_SCRIPT == 'showthread.php') {
-	$plugins->add_hook('showthread_start', 'mybbfancybox_showthread_start');
+mybbfancybox_init();
+
+function mybbfancybox_init()
+{
+	global $mybb, $plugins;
+
+	// Open image URL link in posts
+	// Check ACP settings
+	if ($mybb->settings['mybbfancybox_open_image_urls'] == '1') {
+		// Add hook
+		$plugins->add_hook("parse_message_end","mybbfancybox_post");
+	}
+
+	if (THIS_SCRIPT == 'showthread.php') {
+		// Add hook
+		$plugins->add_hook('showthread_start', 'mybbfancybox_showthread_start');
+	}
 }
 
 function mybbfancybox_showthread_start()
@@ -183,4 +243,66 @@ function mybbfancybox_showthread_start()
 	</script>
 EOF;
 
+}
+
+// If enabled, then make a black magic
+// ...muahahaha... -wc
+function mybbfancybox_post($message)
+{
+	// Only parse allowed extensions once
+	static $allowedExtensions = null;
+
+	global $mybb, $post;
+
+	// If null, then it has not yet been built
+	if ($allowedExtensions === null) {
+		// Set to an empty array so we don't try to build it again if setting is blank/errored
+		$allowedExtensions = array();
+
+		// Get all of the allowed image extensions from the plugin setting
+		$userExts = explode(',', $mybb->settings['mybbfancybox_allowed_extensions']);
+
+		// Remove all empty array elements (eg. 'jpg,,png')
+		$userExts = array_filter($userExts);
+
+		// Trim all array elements (eg. 'jpg, png, gif ,')
+		$allowedExtensions = array_map('trim', $userExts);
+	}
+
+	// Grab the allowed extensions
+	$exts = $allowedExtensions;
+	$regx = '';
+
+	// If the setting value isn't empty, use it to build a custom regular expression
+	if (is_array($exts) && !empty($exts)) {
+		// No separator for the first extension
+		$sep = '';
+		foreach ($exts as $ext) {
+			// Special case for APNG
+			if ($ext === 'apng') {
+				$regx .= $sep.'apng:\/\/[^ ]+';
+				continue;
+			}
+
+			// Add this extension to the list w/separator (if applicable)
+			$regx .= $sep.$ext;
+
+			// Add a separator after the first extension
+			$sep = '|';
+		}
+	}
+
+	// Default
+	if (!$regx) {
+		$regx = 'png|gif|jpeg|bmp|jpg|apng:\/\/[^ ]+';
+	}
+
+	// Search for image extension in URL link
+	$find = '/(.*)href="(.*)('.$regx.')"([^>])*?>([^<]*)?<\/a>/';
+
+	// Open image URL link in MyBB FancyBox modal window 
+	$replace = '$1href="$2$3" data-fancybox="data-'.$post['pid'].'" data-type="image" data-caption="$5"$4>$5</a>';
+
+	$message = preg_replace($find, $replace, $message);
+	return $message;
 }
