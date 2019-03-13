@@ -41,7 +41,7 @@ var MyBBFancybox = (function($, m) {
 			protect: false, // Disable right-click and use simple image protection for images
 			keyboard: true, // Enable keyboard navigation
 			arrows: true, // Display navigation arrows at the screen edges
-			infobar: true, // Should display counter at the top left corner
+			infobar: true, // Display counter in the top left corner
 			thumbs : { // Thumbnails sidebox option
 			autoStart   : false, // Show or hide sidebar with thumbnails of images
 			hideOnClose : true, // Automatically hide thumbnails box on close

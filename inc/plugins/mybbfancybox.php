@@ -129,7 +129,8 @@ function mybbfancybox_install()
 	);
 	$db->insert_query('settinggroups', $setting_group);
 	$gid = (int) $db->insert_id();
-
+	
+	// Open image URLs settings
 	$mybbfancybox_setting = array(
 		'name'			=> 'mybbfancybox_open_image_urls',
 		'title'			=> $lang->mybbfancybox_open_image_urls_title,
@@ -148,6 +149,162 @@ function mybbfancybox_install()
 		'optionscode'	=> 'text',
 		'value'			=> '',
 		'disporder'		=> '2',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+	
+	// FancyBox basic settings - lines #37-48 in mybbfancybox.js in /jscripts folder
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_protect_images',
+		'title'			=> $lang->mybbfancybox_protect_images_title,
+		'description'	=> $lang->mybbfancybox_protect_images_description,
+		'optionscode'	=> 'yesno', // false or true value
+		'value'			=> '0',
+		'disporder'		=> '3',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_watermark',
+		'title'			=> $lang->mybbfancybox_watermark_title,
+		'description'	=> $lang->mybbfancybox_watermark_description,
+		'optionscode'	=> 'yesno', // CSS class watermark or leave blank to disable
+		'value'			=> '0',
+		'disporder'		=> '4',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_watermark_exclude_low_resolution_images',
+		'title'			=> $lang->mybbfancybox_watermark_exclude_low_resolution_images_title,
+		'description'	=> $lang->mybbfancybox_watermark_exclude_low_resolution_images_description,
+		'optionscode'	=> 'yesno', // This will be coded later, I have a working code but must be implemented into FancyBox JS file - need to test first
+		'value'			=> '1',
+		'disporder'		=> '5',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_loop',
+		'title'			=> $lang->mybbfancybox_loop_title,
+		'description'	=> $lang->mybbfancybox_loop_description,
+		'optionscode'	=> 'yesno', // false or true value
+		'value'			=> '1',
+		'disporder'		=> '6',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_infobar',
+		'title'			=> $lang->mybbfancybox_infobar_title,
+		'description'	=> $lang->mybbfancybox_infobar_description,
+		'optionscode'	=> 'yesno', // false or true value
+		'value'			=> '1',
+		'disporder'		=> '7',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_arrows',
+		'title'			=> $lang->mybbfancybox_arrows_title,
+		'description'	=> $lang->mybbfancybox_arrows_description,
+		'optionscode'	=> 'yesno', // false or true value
+		'value'			=> '1',
+		'disporder'		=> '8',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_thumbs',
+		'title'			=> $lang->mybbfancybox_thumbs_title,
+		'description'	=> $lang->mybbfancybox_thumbs_description,
+		'optionscode'	=> 'yesno', // false or true value
+		'value'			=> '0',
+		'disporder'		=> '9',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+	
+	// Settings for buttons - lines #50-58 in mybbfancybox.js in /jscripts folder
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_button_slideshow',
+		'title'			=> $lang->mybbfancybox_button_slideshow_title,
+		'description'	=> $lang->mybbfancybox_button_slideshow_description,
+		'optionscode'	=> 'yesno',
+		'value'			=> '1',
+		'disporder'		=> '10',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_button_fullscreen',
+		'title'			=> $lang->mybbfancybox_button_fullscreen_title,
+		'description'	=> $lang->mybbfancybox_button_fullscreen_description,
+		'optionscode'	=> 'yesno',
+		'value'			=> '1',
+		'disporder'		=> '11',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+	
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_button_thumbs',
+		'title'			=> $lang->mybbfancybox_button_thumbs_title,
+		'description'	=> $lang->mybbfancybox_button_thumbs_description,
+		'optionscode'	=> 'yesno',
+		'value'			=> '1',
+		'disporder'		=> '12',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_button_share',
+		'title'			=> $lang->mybbfancybox_button_share_title,
+		'description'	=> $lang->mybbfancybox_button_share_description,
+		'optionscode'	=> 'yesno',
+		'value'			=> '1',
+		'disporder'		=> '13',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_button_download',
+		'title'			=> $lang->mybbfancybox_button_download_title,
+		'description'	=> $lang->mybbfancybox_button_download_description,
+		'optionscode'	=> 'yesno',
+		'value'			=> '1',
+		'disporder'		=> '14',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_button_zoom',
+		'title'			=> $lang->mybbfancybox_button_zoom_title,
+		'description'	=> $lang->mybbfancybox_button_zoom_description,
+		'optionscode'	=> 'yesno',
+		'value'			=> '1',
+		'disporder'		=> '15',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_button_close',
+		'title'			=> $lang->mybbfancybox_button_close_title,
+		'description'	=> $lang->mybbfancybox_button_close_description,
+		'optionscode'	=> 'yesno',
+		'value'			=> '1',
+		'disporder'		=> '16',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
