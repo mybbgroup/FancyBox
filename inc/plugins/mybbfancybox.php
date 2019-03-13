@@ -374,6 +374,47 @@ function mybbfancybox_showthread_start()
 	// Apply required changes in postbit_attachments_images_image template (replace all content)
 	$templates->cache['postbit_attachments_images_image'] = '<a target="_blank" data-fancybox="data-{$attachment[\'pid\']}" data-type="image"><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
 
+	$watermark = '';
+	if ($mybb->settings['mybbfancybox_watermark']) {
+		$watermark = 'watermark';
+	}
+
+	foreach (array(
+		//'mybbfancybox_watermark_exclude_low_resolution_images' => '?',
+		'mybbfancybox_protect_images' => 'protect',
+		'mybbfancybox_loop' => 'loop',
+		'mybbfancybox_infobar' => 'infobar',
+		'mybbfancybox_arrows' => 'arrows',
+		'mybbfancybox_thumbs' => 'thumbs',
+	) as $key => $var) {
+		$$var = $mybb->settings[$key] ? 'true' : 'false';
+	}
+
+	$buttons = '';
+	$buttonArray = array();
+	foreach (array(
+		'mybbfancybox_button_slideshow' => 'slideShow',
+		'mybbfancybox_button_fullscreen' => 'fullScreen',
+		'mybbfancybox_button_thumbs' => 'thumbs',
+		'mybbfancybox_button_share' => 'share',
+		'mybbfancybox_button_download' => 'download',
+		'mybbfancybox_button_zoom' => 'zoom',
+		'mybbfancybox_button_close' => 'close',
+	) as $key => $button) {
+		if (!$mybb->settings[$key]) {
+			continue;
+		}
+
+		$buttonArray[] = "'{$button}'";
+	}
+
+	if (!empty($buttonArray) &&
+		count($buttonArray) > 0) {
+		$buttons = implode(',', $buttonArray);
+	}
+
+	$buttons = "\n\t\tbuttons: [ {$buttons} ],";
+
 	$headerinclude .= <<<EOF
 
 
@@ -395,6 +436,13 @@ function mybbfancybox_showthread_start()
 		DOWNLOAD: "{$lang->mybbfancybox_download}",
 		SHARE: "{$lang->mybbfancybox_share}",
 		ZOOM: "{$lang->mybbfancybox_zoom}",
+	}, {
+		protect: {$protect},
+		slideClass: "{$watermark}",
+		loop: {$loop},
+		infobar: {$infobar},
+		arrows: {$arrows},
+		thumbs: {$thumbs},{$buttons}
 	});
 	// -->
 	</script>
