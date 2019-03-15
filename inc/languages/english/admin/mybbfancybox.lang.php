@@ -46,23 +46,14 @@ $l['mybbfancybox_arrows_description'] = 'YES (default) to display arrows at the 
 $l['mybbfancybox_thumbs_title'] = 'Display thumbnails sidebox?';
 $l['mybbfancybox_thumbs_description'] = 'YES to automatically display thumbnails sidebox, NO (default) to hide';
 
-$l['mybbfancybox_button_slideshow_title'] = 'Display slideshow button?';
-$l['mybbfancybox_button_slideshow_description'] = 'YES (default) to display a slideshow button in the top right bar, NO to hide';
+// Buttons
+$l['mybbfancybox_buttons_title'] = 'Button Selection';
+$l['mybbfancybox_buttons_description'] = 'Only selected buttons will display in the MyBB Fancybox modal';
 
-$l['mybbfancybox_button_fullscreen_title'] = 'Display full screen button?';
-$l['mybbfancybox_button_fullscreen_description'] = 'YES (default) to display a full screen button in the top right bar, NO to hide';
-
-$l['mybbfancybox_button_thumbs_title'] = 'Display thumbnails button?';
-$l['mybbfancybox_button_thumbs_description'] = 'YES (default) to display a thumbnails button in the top right bar, NO to hide';
-
-$l['mybbfancybox_button_share_title'] = 'Display share button?';
-$l['mybbfancybox_button_share_description'] = 'YES (default) to display a share button in the top right bar, NO to hide';
-
-$l['mybbfancybox_button_download_title'] = 'Display download button?';
-$l['mybbfancybox_button_download_description'] = 'YES (default) to display a download button in the top right bar, NO to hide';
-
-$l['mybbfancybox_button_zoom_title'] = 'Display zoom button?';
-$l['mybbfancybox_button_zoom_description'] = 'YES (default) to display a zoom button in the top right bar, NO to hide';
-
-$l['mybbfancybox_button_close_title'] = 'Display close button?';
-$l['mybbfancybox_button_close_description'] = 'YES (default) to display a close button in the top right bar, NO to hide';
+$l['mybbfancybox_button_slideshow_title'] = 'Slideshow';
+$l['mybbfancybox_button_fullscreen_title'] = 'Full Screen';
+$l['mybbfancybox_button_thumbs_title'] = 'Thumbnails';
+$l['mybbfancybox_button_share_title'] = 'Share';
+$l['mybbfancybox_button_download_title'] = 'Download';
+$l['mybbfancybox_button_zoom_title'] = 'Zoom';
+$l['mybbfancybox_button_close_title'] = 'Close';
