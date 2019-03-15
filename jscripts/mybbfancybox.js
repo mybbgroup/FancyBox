@@ -14,6 +14,27 @@ var MyBBFancybox = (function($, m) {
 		DOWNLOAD: 'Download',
 		SHARE: 'Share',
 		ZOOM: 'Zoom',
+	},
+	options = {
+		slideClass: '',
+		loop: true,
+		protect: false,
+		keyboard: true,
+		arrows: true,
+		infobar: true,
+		thumbs: {
+			autoStart: false,
+			hideOnClose: true,
+		},
+		buttons: [
+			'slideShow',
+			'fullScreen',
+			'thumbs',
+			'share',
+			'download',
+			'zoom',
+			'close',
+		],
 	};
 
 	/**
@@ -35,28 +56,7 @@ var MyBBFancybox = (function($, m) {
 		$.fancybox.defaults.i18n.en = lang;
 
 		// FancyBox default settings
-		$('[data-fancybox]').fancybox({
-			slideClass : '', // Watermark CSS class (leave empty or use "watermark" CSS class)
-			loop : true, // Enable infinite gallery navigation
-			protect: false, // Disable right-click and use simple image protection for images
-			keyboard: true, // Enable keyboard navigation
-			arrows: true, // Display navigation arrows at the screen edges
-			infobar: true, // Should display counter at the top left corner
-			thumbs : { // Thumbnails sidebox option
-			autoStart   : false, // Show or hide sidebar with thumbnails of images
-			hideOnClose : true, // Automatically hide thumbnails box on close
-			},
-			
-			buttons : [ //Buttons displayed in FancyBox - to hide any of them just comment them out
-				'slideShow', // Slideshow button
-				'fullScreen', // Full screen button
-				'thumbs', // Thumbnails button
-				'share', // Share button
-				'download', // Download button
-				'zoom', // Zoom button
-				'close' // Close button
-			]
-		});
+		$('[data-fancybox]').fancybox(options);
 	}
 
 	/**
@@ -64,8 +64,9 @@ var MyBBFancybox = (function($, m) {
 	 *
 	 * @return void
 	 */
-	function setup(l) {
+	function setup(l, o) {
 		$.extend(lang, l || {});
+		$.extend(options, o || {});
 	}
 
 	m.setup = setup;
