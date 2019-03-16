@@ -14,6 +14,7 @@ var MyBBFancybox = (function($, m) {
 		DOWNLOAD: 'Download',
 		SHARE: 'Share',
 		ZOOM: 'Zoom',
+		MINIMIZE: 'Minimize',
 	},
 	options = {
 		slideClass: '',
@@ -27,6 +28,7 @@ var MyBBFancybox = (function($, m) {
 			hideOnClose: true,
 		},
 		buttons: [
+			'minimize', // this is needed for the new feature - display only when setting in ACP is enabled
 			'slideShow',
 			'fullScreen',
 			'thumbs',

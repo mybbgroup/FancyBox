@@ -5,7 +5,7 @@
  * 
  * @package MyBB Plugin
  * @author MyBB Group - Eldenroot & Wildcard - <eldenroot@gmail.com>
- * @copyright 2018 MyBB Group <http://mybb.group>
+ * @copyright 2019 MyBB Group <http://mybb.group>
  * @link <https://github.com/mybbgroup/MyBB_Fancybox>
  * @license GPL-3.0
  * 
@@ -54,7 +54,7 @@ function mybbfancybox_info()
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"author"		=> "MyBB Group (Eldenroot & Wildcard)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "0.8.5",
+		"version"		=> "0.9.0dev",
 		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
@@ -153,6 +153,17 @@ function mybbfancybox_install()
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
 	
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_include_images_from_urls_into_gallery', // issue GitHub #49
+		'title'			=> $lang->mybbfancybox_include_images_from_urls_into_gallery_title,
+		'description'	=> $lang->mybbfancybox_include_images_from_urls_into_gallery_description,
+		'optionscode'	=> 'yesno',
+		'value'			=> '1',
+		'disporder'		=> '3',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+	
 	// FancyBox basic settings - lines #37-48 in mybbfancybox.js in /jscripts folder
 	$mybbfancybox_setting = array(
 		'name'			=> 'mybbfancybox_protect_images',
@@ -160,29 +171,40 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_protect_images_description,
 		'optionscode'	=> 'yesno', // false or true value
 		'value'			=> '0',
-		'disporder'		=> '3',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark',
-		'title'			=> $lang->mybbfancybox_watermark_title,
-		'description'	=> $lang->mybbfancybox_watermark_description,
-		'optionscode'	=> 'yesno', // CSS class watermark or leave blank to disable
-		'value'			=> '0',
 		'disporder'		=> '4',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark_exclude_low_resolution_images',
+		'name'			=> 'mybbfancybox_watermark', // displayed only the previous setting (protect images) is enabled
+		'title'			=> $lang->mybbfancybox_watermark_title,
+		'description'	=> $lang->mybbfancybox_watermark_description,
+		'optionscode'	=> 'yesno', // CSS class watermark or leave blank to disable (protect images must be enable to use that!)
+		'value'			=> '0',
+		'disporder'		=> '5',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_watermark_exclude_low_resolution_images', // displayed only the previous setting (watermark) is enabled
 		'title'			=> $lang->mybbfancybox_watermark_exclude_low_resolution_images_title,
 		'description'	=> $lang->mybbfancybox_watermark_exclude_low_resolution_images_description,
-		'optionscode'	=> 'yesno', // This will be coded later, I have a working code but must be implemented into FancyBox JS file - need to test first
+		'optionscode'	=> 'yesno', // Exclude low resolution images from adding watermark
 		'value'			=> '1',
-		'disporder'		=> '5',
+		'disporder'		=> '6',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_watermark_resolutions', //  displayed only if the previous setting (watermark exclude...) is set to YES
+		'title'			=> $lang->mybbfancybox_watermark_resolutions_title,
+		'description'	=> $lang->mybbfancybox_watermark_resolutions_description,
+		'optionscode'	=> 'text',
+		'value'			=> '300|300', // Instead of using hard-coded values would be better to add a custom box max width X height px
+		'disporder'		=> '7',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -193,7 +215,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_loop_description,
 		'optionscode'	=> 'yesno', // false or true value
 		'value'			=> '1',
-		'disporder'		=> '6',
+		'disporder'		=> '8',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -204,7 +226,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_infobar_description,
 		'optionscode'	=> 'yesno', // false or true value
 		'value'			=> '1',
-		'disporder'		=> '7',
+		'disporder'		=> '9',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -215,7 +237,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_arrows_description,
 		'optionscode'	=> 'yesno', // false or true value
 		'value'			=> '1',
-		'disporder'		=> '8',
+		'disporder'		=> '10',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -226,7 +248,18 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_thumbs_description,
 		'optionscode'	=> 'yesno', // false or true value
 		'value'			=> '0',
-		'disporder'		=> '9',
+		'disporder'		=> '11',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+	
+	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_minimize',
+		'title'			=> $lang->mybbfancybox_minimize_title,
+		'description'	=> $lang->mybbfancybox_minimize_description,
+		'optionscode'	=> 'yesno', // enable or disable feature; CSS is already added into mybbfancybox.css; we need just to load an extra JS + delete commented minimize button in config file (GitHub issue #32)
+		'value'			=> '1',
+		'disporder'		=> '12',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -252,7 +285,7 @@ EOF;
 		'description'	=> $lang->mybbfancybox_buttons_description,
 		'optionscode'	=> $db->escape_string($buttonSetting),
 		'value'			=> $db->escape_string(serialize(array('slideShow', 'fullScreen', 'thumbs', 'share', 'download', 'zoom', 'close'))),
-		'disporder'		=> '10',
+		'disporder'		=> '13',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -285,7 +318,7 @@ function mybbfancybox_uninstall()
 	update_theme_stylesheet_list(1, false, true);
 	
 	// Delete plugin settings in ACP
-	$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name IN ('mybbfancybox_open_image_urls','mybbfancybox_allowed_extensions','mybbfancybox_protect_images','mybbfancybox_watermark','mybbfancybox_watermark_exclude_low_resolution_images','mybbfancybox_loop','mybbfancybox_infobar','mybbfancybox_arrows','mybbfancybox_thumbs','mybbfancybox_buttons')");
+	$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name IN ('mybbfancybox_open_image_urls','mybbfancybox_allowed_extensions','mybbfancybox_include_images_from_urls_into_gallery','mybbfancybox_protect_images','mybbfancybox_watermark','mybbfancybox_watermark_exclude_low_resolution_images','mybbfancybox_watermark_resolutions','mybbfancybox_loop','mybbfancybox_infobar','mybbfancybox_arrows','mybbfancybox_thumbs','mybbfancybox_minimize','mybbfancybox_buttons')");
 	$db->write_query("DELETE FROM ".TABLE_PREFIX."settinggroups WHERE name = 'mybbfancybox'");
 	
 	// Rebuild settings
@@ -375,6 +408,7 @@ function mybbfancybox_showthread_start()
 		DOWNLOAD: "{$lang->mybbfancybox_download}",
 		SHARE: "{$lang->mybbfancybox_share}",
 		ZOOM: "{$lang->mybbfancybox_zoom}",
+		MINIMIZE: "{$lang->mybbfancybox_minimize}",
 	}, {
 		protect: {$protect},
 		slideClass: "{$watermark}",

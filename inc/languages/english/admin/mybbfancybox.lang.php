@@ -5,7 +5,7 @@
  * 
  * @package MyBB Plugin
  * @author MyBB Group - Eldenroot & Wildcard - <eldenroot@gmail.com>
- * @copyright 2018 MyBB Group <http://mybb.group>
+ * @copyright 2019 MyBB Group <http://mybb.group>
  * @link <https://github.com/mybbgroup/MyBB_Fancybox>
  * @license GPL-3.0
  * 
@@ -25,6 +25,9 @@ $l['mybbfancybox_open_image_urls_description'] = 'YES (default) to automatically
 $l['mybbfancybox_allowed_extensions_title'] = 'Allowed image extensions';
 $l['mybbfancybox_allowed_extensions_description'] = 'Leave blank (default) to use the default image extensions (.jpg, .gif, .png, .jpeg, .bmp, .apng) or enter a comma separated list of extensions to allow.<br />(This setting has no affect if the above setting is set to NO)';
 
+$l['mybbfancybox_mybbfancybox_include_images_from_urls_into_gallery_title'] = 'Include images from URLs into gallery?';
+$l['mybbfancybox_mybbfancybox_include_images_from_urls_into_gallery_description'] = 'YES (default) to include detected images from URLs in posts into gallery, NO to disable';
+
 $l['mybbfancybox_protect_images_title'] = 'Protect images?';
 $l['mybbfancybox_protect_images_description'] = 'YES to disable right-click and use simple image protection, NO (default) to enable right-click';
 
@@ -33,6 +36,9 @@ $l['mybbfancybox_watermark_description'] = 'YES to enable displaying a watermark
 
 $l['mybbfancybox_watermark_exclude_low_resolution_images_title'] = 'Do not display watermark in small resolution images?';
 $l['mybbfancybox_watermark_exclude_low_resolution_images_description'] = 'YES (default) to not add watermark into small resolution images, NO to disable';
+
+$l['mybbfancybox_watermark_resolutions_title'] = 'Maximum image dimensions to exclude watermark?';
+$l['mybbfancybox_watermark_resolutions_description'] = 'Set maximum width and height of image resolution in pixels to not add watermark (width|height)';
 
 $l['mybbfancybox_loop_title'] = 'Enable infinite gallery navigation?';
 $l['mybbfancybox_loop_description'] = 'YES (default) to enable infinite navigation between images in gallery, NO to disable';
@@ -45,6 +51,9 @@ $l['mybbfancybox_arrows_description'] = 'YES (default) to display arrows at the 
 
 $l['mybbfancybox_thumbs_title'] = 'Display thumbnails sidebox?';
 $l['mybbfancybox_thumbs_description'] = 'YES to automatically display thumbnails sidebox, NO (default) to hide';
+
+$l['mybbfancybox_minimize_title'] = 'Enable minimize gallery?';
+$l['mybbfancybox_minimize_description'] = 'YES (default) to enable minimizing MyBB FancyBox galery, NO to disable';
 
 // Buttons
 $l['mybbfancybox_buttons_title'] = 'Button Selection';
