@@ -362,13 +362,7 @@ function mybbfancybox_showthread_start()
 	// Apply required changes in postbit_attachments_images_image template (replace all content)
 	$templates->cache['postbit_attachments_images_image'] = '<a target="_blank" data-fancybox="data-{$attachment[\'pid\']}" data-type="image"><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
 
-	$watermark = '';
-	if ($mybb->settings['mybbfancybox_watermark']) {
-		$watermark = 'watermark';
-	}
-
 	foreach (array(
-		//'mybbfancybox_watermark_exclude_low_resolution_images' => '?',
 		'mybbfancybox_protect_images' => 'protect',
 		'mybbfancybox_loop' => 'loop',
 		'mybbfancybox_infobar' => 'infobar',
@@ -376,6 +370,29 @@ function mybbfancybox_showthread_start()
 		'mybbfancybox_thumbs' => 'thumbs',
 	) as $key => $var) {
 		$$var = $mybb->settings[$key] ? 'true' : 'false';
+	}
+
+	$loresScript = $watermark = '';
+	if ($protect &&
+		$mybb->settings['mybbfancybox_watermark']) {
+		$watermark = '';
+
+		if ($mybb->settings['mybbfancybox_watermark_exclude_low_resolution_images']) {
+			$pieces = explode('|', $mybb->settings['mybbfancybox_watermark_resolutions']);
+
+			list($w, $h) = array_map('intval', $pieces);
+
+			if ($w && $h) {
+				$loresScript = <<<EOF
+
+		afterLoad: function(instance, current) {
+			if (current.width > {$w} && current.height > {$h} ) {
+				current.\$slide.addClass('watermark');
+			}
+		},
+EOF;
+			}
+		}
 	}
 
 	$buttonArray = (array) unserialize($mybb->settings['mybbfancybox_buttons']);
@@ -415,7 +432,7 @@ function mybbfancybox_showthread_start()
 		loop: {$loop},
 		infobar: {$infobar},
 		arrows: {$arrows},
-		thumbs: {$thumbs},{$buttons}
+		thumbs: {$thumbs},{$buttons}{$loresScript}
 	});
 	// -->
 	</script>

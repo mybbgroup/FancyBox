@@ -13,8 +13,9 @@
 /** MyBB FancyBox - watermark feature **/
 .fancybox-slide.watermark .fancybox-spaceball {
 	background-image: url('images/mybbfancybox/watermark.png');
-	background-size: cover;
+	background-size: contain;
 	background-repeat: no-repeat;
+	background-position: center;
 	opacity: 0.90;
 }
 
