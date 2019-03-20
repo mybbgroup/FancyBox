@@ -411,12 +411,12 @@ function mybbfancybox_showthread_start()
 		$$var = $mybb->settings[$key] ? true : false;
 	}
 
-	$afterLoadScipt = '';
+	$afterLoadScript = '';
 	if ($protect &&
 		$watermark) {
 		$watermark = '';
 
-		$afterLoadScipt = <<<EOF
+		$afterLoadScript = <<<EOF
 
 		afterLoad: function(instance, current) {
 			current.\$slide.addClass('watermark');
@@ -429,7 +429,7 @@ EOF;
 
 			if ($w > 0 &&
 				$h > 0) {
-				$afterLoadScipt = <<<EOF
+				$afterLoadScript = <<<EOF
 
 		afterLoad: function(instance, current) {
 			if (current.width > {$w} && current.height > {$h} ) {
@@ -477,7 +477,7 @@ EOF;
 		loop: {$loop},
 		infobar: {$infobar},
 		arrows: {$arrows},
-		thumbs: {$thumbs},{$buttons}{$afterLoadScipt}
+		thumbs: {$thumbs},{$buttons}{$afterLoadScript}
 	});
 	// -->
 	</script>
