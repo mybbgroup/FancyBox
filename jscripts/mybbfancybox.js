@@ -1,4 +1,11 @@
-var MyBBFancybox = (function($, m) {
+/**
+ * MyBB FancyBox integration
+ *
+ * @param  Object jQuery
+ * @param  Object MyBBFancyBox
+ * @return Object MyBBFancyBox
+ */
+var MyBBFancyBox = (function($, m) {
 	"use strict";
 
 	var lang = {
@@ -40,7 +47,7 @@ var MyBBFancybox = (function($, m) {
 	};
 
 	/**
-	 * initialize Fancybox
+	 * initialize FancyBox
 	 *
 	 * @return void
 	 */
@@ -75,4 +82,4 @@ var MyBBFancybox = (function($, m) {
 
 	$(init);
 	return m;
-})(jQuery, MyBBFancybox || {});
+})(jQuery, MyBBFancyBox || {});
