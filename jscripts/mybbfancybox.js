@@ -1,4 +1,11 @@
-var MyBBFancybox = (function($, m) {
+/**
+ * MyBB FancyBox integration
+ *
+ * @param  Object jQuery
+ * @param  Object MyBBFancyBox
+ * @return Object MyBBFancyBox
+ */
+var MyBBFancyBox = (function($, m) {
 	"use strict";
 
 	var lang = {
@@ -14,6 +21,7 @@ var MyBBFancybox = (function($, m) {
 		DOWNLOAD: 'Download',
 		SHARE: 'Share',
 		ZOOM: 'Zoom',
+		MINIMIZE: 'Minimize',
 	},
 	options = {
 		slideClass: '',
@@ -27,6 +35,7 @@ var MyBBFancybox = (function($, m) {
 			hideOnClose: true,
 		},
 		buttons: [
+			'minimize', // this is needed for the new feature - display only when setting in ACP is enabled
 			'slideShow',
 			'fullScreen',
 			'thumbs',
@@ -38,7 +47,7 @@ var MyBBFancybox = (function($, m) {
 	};
 
 	/**
-	 * initialize Fancybox
+	 * initialize FancyBox
 	 *
 	 * @return void
 	 */
@@ -73,4 +82,4 @@ var MyBBFancybox = (function($, m) {
 
 	$(init);
 	return m;
-})(jQuery, MyBBFancybox || {});
+})(jQuery, MyBBFancyBox || {});

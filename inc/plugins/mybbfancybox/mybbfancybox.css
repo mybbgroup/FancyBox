@@ -10,15 +10,43 @@
 	text-align: left !important;
 }
 
-/** MyBB FancyBox - watermark **/
+/** MyBB FancyBox - watermark feature **/
 .fancybox-slide.watermark .fancybox-spaceball {
-	background-image: url('/images/mybbfancybox/watermark.png');
-	background-size: cover;
+	background-image: url('images/mybbfancybox/watermark.png');
+	background-size: contain;
 	background-repeat: no-repeat;
+	background-position: center;
 	opacity: 0.90;
 }
 
 /** FancyBox - watermark - hide while scaling (zooming in/out) **/
 .fancybox-is-scaling .fancybox-spaceball {
 	background-image: none !important;
+}
+
+/** FancyBox - minimize feature **/
+.minimized {
+	height: 44px;
+}
+
+.minimized .fancybox-stage,
+.minimized .fancybox-navigation {
+	display: none;
+}
+
+.fancybox-button--minimise svg {
+	padding: 2px;
+}
+
+.fancybox-button--minimise svg:nth-child(2) {
+	display: none;
+	padding: 5px;
+}
+
+.minimized .fancybox-button--minimise svg:nth-child(1) {
+	display: none;
+}
+
+.minimized .fancybox-button--minimise svg:nth-child(2) {
+	display: block;
 }

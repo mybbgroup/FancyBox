@@ -5,7 +5,7 @@
  * 
  * @package MyBB Plugin
  * @author MyBB Group - Eldenroot & Wildcard - <eldenroot@gmail.com>
- * @copyright 2018 MyBB Group <http://mybb.group>
+ * @copyright 2019 MyBB Group <http://mybb.group>
  * @link <https://github.com/mybbgroup/MyBB_Fancybox>
  * @license GPL-3.0
  * 
@@ -30,3 +30,4 @@ $l['mybbfancybox_thumbs'] = 'Thumbnails';
 $l['mybbfancybox_download'] = 'Download';
 $l['mybbfancybox_share'] = 'Share';
 $l['mybbfancybox_zoom'] = 'Zoom';
+$l['mybbfancybox_minimize'] = 'Minimize';
