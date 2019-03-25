@@ -35,7 +35,7 @@ var MyBBFancyBox = (function($, m) {
 			hideOnClose: true,
 		},
 		buttons: [
-			'minimize', // this is needed for the new feature - display only when setting in ACP is enabled
+			'minimize',
 			'slideShow',
 			'fullScreen',
 			'thumbs',
