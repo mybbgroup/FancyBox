@@ -410,7 +410,7 @@ function mybbfancybox_showthread_start()
 			fb.$refs.container.toggleClass('minimized');
 		}
 	});
-		EOF; 
+EOF;
 	}
 	
 	foreach (array(
