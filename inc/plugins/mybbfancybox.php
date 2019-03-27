@@ -407,7 +407,7 @@ function mybbfancybox_showthread_start()
 		var fb = $.fancybox.getInstance();
 
 		if (fb) {
-			fb.$refs.container.toggleClass('minimized');
+			fb.\$refs.container.toggleClass('minimized');
 		}
 	});
 EOF;
