@@ -498,6 +498,7 @@ EOF;
 		arrows: {$arrows},
 		thumbs: {$thumbs},{$buttons}{$afterLoadScript}
 	});
+	{$minimize}
 	// -->
 	</script>
 EOF;
