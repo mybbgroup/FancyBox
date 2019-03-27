@@ -404,7 +404,7 @@ function mybbfancybox_showthread_start()
 
 	// Add click event for minimize button
 	\$(document).on('click', '[data-fancybox-minimize]', function() {
-		var fb = $.fancybox.getInstance();
+		var fb = \$.fancybox.getInstance();
 
 		if (fb) {
 			fb.\$refs.container.toggleClass('minimized');
