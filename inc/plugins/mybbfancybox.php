@@ -394,23 +394,12 @@ function mybbfancybox_showthread_start()
 	// Apply required changes in postbit_attachments_images_image template (replace all content)
 	$templates->cache['postbit_attachments_images_image'] = '<a target="_blank" data-fancybox="data-{$attachment[\'pid\']}" data-type="image"><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
 
+	$buttonArray = (array) unserialize($mybb->settings['mybbfancybox_buttons']);
+
 	// Minimize button - load JS code only when enabled in ACP
 	$minimize = '';
 	if ($mybb->settings['mybbfancybox_minimize'] == 1) {
-		$minimize = <<<EOF
-
-	// Create templates for minimize and maximize buttons
-	$.fancybox.defaults.btnTpl.minimize = '<button data-fancybox-minimize class="fancybox-button fancybox-button--minimise" title="{{MINIMIZE}}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 445 445"><g fill="#010002"><path d="M440.3 4.7a15.9 15.9 0 0 0-22.5 0L286 136.5V47.7a16 16 0 0 0-31.7 0V175l1.2 6 3.3 5 .1.2h.2l5 3.4 6 1.2h127.2a16 16 0 0 0 0-31.8h-88.8L440.3 27.2a16 16 0 0 0 0-22.5zM180.9 255.5l-6-1.2H47.6a16 16 0 0 0 0 31.8h88.7L4.7 417.8A15.9 15.9 0 1 0 27 440.3L159 308.5v88.8a16 16 0 0 0 31.8 0V270.2l-1.2-6a16 16 0 0 0-8.6-8.7z"/></g></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 381.4 381.4"><path d="M380.1 9.8c-1.6-3.9-4.7-7-8.5-8.6L365.5 0h-159a16 16 0 0 0 0 31.8h120.6L31.8 327V206.6a15.9 15.9 0 0 0-31.8 0v159l1.2 6 3.3 5 .1.1.2.1 5 3.4 6 1.2h159a16 16 0 0 0 0-31.8H54.3L349.6 54.3v120.5a16 16 0 0 0 31.8 0v-159l-1.3-6z" fill="#010002"/></svg></button>';
-
-	// Add click event for minimize button
-	\$(document).on('click', '[data-fancybox-minimize]', function() {
-		var fb = \$.fancybox.getInstance();
-
-		if (fb) {
-			fb.\$refs.container.toggleClass('minimized');
-		}
-	});
-EOF;
+		$buttonArray[] = 'minimize';
 	}
 	
 	foreach (array(
@@ -460,8 +449,6 @@ EOF;
 		}
 	}
 
-	$buttonArray = (array) unserialize($mybb->settings['mybbfancybox_buttons']);
-
 	if (!empty($buttonArray) &&
 		count($buttonArray) > 0) {
 		$buttons = "'".implode("','", $buttonArray)."'";
@@ -498,7 +485,6 @@ EOF;
 		arrows: {$arrows},
 		thumbs: {$thumbs},{$buttons}{$afterLoadScript}
 	});
-	{$minimize}
 	// -->
 	</script>
 EOF;
