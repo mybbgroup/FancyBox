@@ -59,7 +59,7 @@ function mybbfancybox_info()
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"author"		=> "MyBB Group (Eldenroot & Wildcard)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "0.9.0dev",
+		"version"		=> "1.0.0dev",
 		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
@@ -168,7 +168,7 @@ function mybbfancybox_install()
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_include_images_from_urls_into_gallery', // issue GitHub #49
+		'name'			=> 'mybbfancybox_include_images_from_urls_into_gallery',
 		'title'			=> $lang->mybbfancybox_include_images_from_urls_into_gallery_title,
 		'description'	=> $lang->mybbfancybox_include_images_from_urls_into_gallery_description,
 		'optionscode'	=> 'yesno',
@@ -178,12 +178,12 @@ function mybbfancybox_install()
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
 
-	// FancyBox basic settings - lines #37-48 in mybbfancybox.js in /jscripts folder
+	// FancyBox basic settings
 	$mybbfancybox_setting = array(
 		'name'			=> 'mybbfancybox_protect_images',
 		'title'			=> $lang->mybbfancybox_protect_images_title,
 		'description'	=> $lang->mybbfancybox_protect_images_description,
-		'optionscode'	=> 'yesno', // false or true value
+		'optionscode'	=> 'yesno',
 		'value'			=> '0',
 		'disporder'		=> '4',
 		'gid'			=> $gid
@@ -191,10 +191,10 @@ function mybbfancybox_install()
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark', // displayed only the previous setting (protect images) is enabled
+		'name'			=> 'mybbfancybox_watermark',
 		'title'			=> $lang->mybbfancybox_watermark_title,
 		'description'	=> $lang->mybbfancybox_watermark_description,
-		'optionscode'	=> 'yesno', // CSS class watermark or leave blank to disable (protect images must be enable to use that!)
+		'optionscode'	=> 'yesno',
 		'value'			=> '0',
 		'disporder'		=> '5',
 		'gid'			=> $gid
@@ -202,7 +202,7 @@ function mybbfancybox_install()
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark_low_resolution_images', // displayed only the previous setting (watermark) is enabled
+		'name'			=> 'mybbfancybox_watermark_low_resolution_images',
 		'title'			=> $lang->mybbfancybox_watermark_low_resolution_images_title,
 		'description'	=> $lang->mybbfancybox_watermark_low_resolution_images_description,
 		'optionscode'	=> 'yesno', // Exclude low resolution images from adding watermark
@@ -213,11 +213,11 @@ function mybbfancybox_install()
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark_resolutions', //  displayed only if the previous setting (watermark exclude...) is set to YES
+		'name'			=> 'mybbfancybox_watermark_resolutions',
 		'title'			=> $lang->mybbfancybox_watermark_resolutions_title,
 		'description'	=> $lang->mybbfancybox_watermark_resolutions_description,
 		'optionscode'	=> 'text',
-		'value'			=> '300|300', // Instead of using hard-coded values would be better to add a custom box max width X height px
+		'value'			=> '300|300',
 		'disporder'		=> '7',
 		'gid'			=> $gid
 	);
@@ -271,7 +271,7 @@ function mybbfancybox_install()
 		'name'			=> 'mybbfancybox_minimize',
 		'title'			=> $lang->mybbfancybox_minimize_title,
 		'description'	=> $lang->mybbfancybox_minimize_description,
-		'optionscode'	=> 'yesno', // enable or disable feature; CSS is already added into mybbfancybox.css; we need just to load an extra JS + delete commented minimize button in config file (GitHub issue #32)
+		'optionscode'	=> 'yesno',
 		'value'			=> '1',
 		'disporder'		=> '12',
 		'gid'			=> $gid
@@ -292,7 +292,7 @@ php
 
 EOF;
 
-	// Settings for buttons - lines #50-58 in mybbfancybox.js in /jscripts folder
+	// Settings for buttons
 	$mybbfancybox_setting = array(
 		'name'			=> 'mybbfancybox_buttons',
 		'title'			=> $lang->mybbfancybox_buttons_title,
@@ -394,6 +394,14 @@ function mybbfancybox_showthread_start()
 	// Apply required changes in postbit_attachments_images_image template (replace all content)
 	$templates->cache['postbit_attachments_images_image'] = '<a target="_blank" data-fancybox="data-{$attachment[\'pid\']}" data-type="image"><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
 
+	$buttonArray = (array) unserialize($mybb->settings['mybbfancybox_buttons']);
+
+	// Minimize button - load JS code only when enabled in ACP
+	$minimize = '';
+	if ($mybb->settings['mybbfancybox_minimize'] == 1) {
+		$buttonArray[] = 'minimize';
+	}
+	
 	foreach (array(
 		'mybbfancybox_protect_images' => 'protect',
 		'mybbfancybox_loop' => 'loop',
@@ -440,8 +448,6 @@ EOF;
 			}
 		}
 	}
-
-	$buttonArray = (array) unserialize($mybb->settings['mybbfancybox_buttons']);
 
 	if (!empty($buttonArray) &&
 		count($buttonArray) > 0) {
@@ -592,4 +598,3 @@ function mybbfancybox_print_peekers($peekers)
 
 	return $peekers;
 }
-
