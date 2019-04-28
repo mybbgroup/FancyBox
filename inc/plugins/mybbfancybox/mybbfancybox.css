@@ -34,6 +34,12 @@
 	display: none;
 }
 
+.minimized .fancybox-caption__body {
+	margin-bottom: -13px;
+	font-size: 13px;
+	opacity: 0.95;
+}
+
 .fancybox-button--minimise svg {
 	padding: 2px;
 }
