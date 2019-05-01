@@ -5,7 +5,7 @@
  *
  * @package MyBB Plugin
  * @author MyBB Group - Eldenroot & Wildcard - <eldenroot@gmail.com>
- * @copyright 2019 MyBB Group <http://mybb.group>
+ * @copyright 2019 MyBB Group <https://mybb.group>
  * @link <https://github.com/mybbgroup/MyBB_Fancybox>
  * @license GPL-3.0
  *
@@ -58,8 +58,8 @@ function mybbfancybox_info()
 		"description"	=> $lang->mybbfancybox_description,
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"author"		=> "MyBB Group (Eldenroot & Wildcard)",
-		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "0.9.0dev",
+		"authorsite"	=> "https://mybb.group",
+		"version"		=> "1.0.0dev",
 		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
@@ -168,7 +168,7 @@ function mybbfancybox_install()
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_include_images_from_urls_into_gallery', // issue GitHub #49
+		'name'			=> 'mybbfancybox_include_images_from_urls_into_gallery',
 		'title'			=> $lang->mybbfancybox_include_images_from_urls_into_gallery_title,
 		'description'	=> $lang->mybbfancybox_include_images_from_urls_into_gallery_description,
 		'optionscode'	=> 'yesno',
@@ -178,12 +178,12 @@ function mybbfancybox_install()
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
 
-	// FancyBox basic settings - lines #37-48 in mybbfancybox.js in /jscripts folder
+	// FancyBox basic settings
 	$mybbfancybox_setting = array(
 		'name'			=> 'mybbfancybox_protect_images',
 		'title'			=> $lang->mybbfancybox_protect_images_title,
 		'description'	=> $lang->mybbfancybox_protect_images_description,
-		'optionscode'	=> 'yesno', // false or true value
+		'optionscode'	=> 'yesno',
 		'value'			=> '0',
 		'disporder'		=> '4',
 		'gid'			=> $gid
@@ -191,10 +191,10 @@ function mybbfancybox_install()
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark', // displayed only the previous setting (protect images) is enabled
+		'name'			=> 'mybbfancybox_watermark',
 		'title'			=> $lang->mybbfancybox_watermark_title,
 		'description'	=> $lang->mybbfancybox_watermark_description,
-		'optionscode'	=> 'yesno', // CSS class watermark or leave blank to disable (protect images must be enable to use that!)
+		'optionscode'	=> 'yesno',
 		'value'			=> '0',
 		'disporder'		=> '5',
 		'gid'			=> $gid
@@ -202,7 +202,7 @@ function mybbfancybox_install()
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark_low_resolution_images', // displayed only the previous setting (watermark) is enabled
+		'name'			=> 'mybbfancybox_watermark_low_resolution_images',
 		'title'			=> $lang->mybbfancybox_watermark_low_resolution_images_title,
 		'description'	=> $lang->mybbfancybox_watermark_low_resolution_images_description,
 		'optionscode'	=> 'yesno', // Exclude low resolution images from adding watermark
@@ -213,11 +213,11 @@ function mybbfancybox_install()
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark_resolutions', //  displayed only if the previous setting (watermark exclude...) is set to YES
+		'name'			=> 'mybbfancybox_watermark_resolutions',
 		'title'			=> $lang->mybbfancybox_watermark_resolutions_title,
 		'description'	=> $lang->mybbfancybox_watermark_resolutions_description,
 		'optionscode'	=> 'text',
-		'value'			=> '300|300', // Instead of using hard-coded values would be better to add a custom box max width X height px
+		'value'			=> '300|300',
 		'disporder'		=> '7',
 		'gid'			=> $gid
 	);
@@ -271,7 +271,7 @@ function mybbfancybox_install()
 		'name'			=> 'mybbfancybox_minimize',
 		'title'			=> $lang->mybbfancybox_minimize_title,
 		'description'	=> $lang->mybbfancybox_minimize_description,
-		'optionscode'	=> 'yesno', // enable or disable feature; CSS is already added into mybbfancybox.css; we need just to load an extra JS + delete commented minimize button in config file (GitHub issue #32)
+		'optionscode'	=> 'yesno',
 		'value'			=> '1',
 		'disporder'		=> '12',
 		'gid'			=> $gid
@@ -287,18 +287,19 @@ php
 	<option value=\"share\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("share", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_share_title}</option>
 	<option value=\"download\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("download", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_download_title}</option>
 	<option value=\"zoom\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("zoom", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_zoom_title}</option>
+	<option value=\"minimize\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("minimize", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_minimize_title}</option>
 	<option value=\"close\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("close", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_close_title}</option>
 </select>
 
 EOF;
 
-	// Settings for buttons - lines #50-58 in mybbfancybox.js in /jscripts folder
+	// Settings for buttons
 	$mybbfancybox_setting = array(
 		'name'			=> 'mybbfancybox_buttons',
 		'title'			=> $lang->mybbfancybox_buttons_title,
 		'description'	=> $lang->mybbfancybox_buttons_description,
 		'optionscode'	=> $db->escape_string($buttonSetting),
-		'value'			=> $db->escape_string(serialize(array('slideShow', 'fullScreen', 'thumbs', 'share', 'download', 'zoom', 'close'))),
+		'value'			=> $db->escape_string(serialize(array('slideShow', 'fullScreen', 'thumbs', 'share', 'download', 'zoom', 'minimize', 'close'))),
 		'disporder'		=> '13',
 		'gid'			=> $gid
 	);
@@ -394,6 +395,8 @@ function mybbfancybox_showthread_start()
 	// Apply required changes in postbit_attachments_images_image template (replace all content)
 	$templates->cache['postbit_attachments_images_image'] = '<a target="_blank" data-fancybox="data-{$attachment[\'pid\']}" data-type="image"><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
 
+	$buttonArray = (array) unserialize($mybb->settings['mybbfancybox_buttons']);
+	
 	foreach (array(
 		'mybbfancybox_protect_images' => 'protect',
 		'mybbfancybox_loop' => 'loop',
@@ -441,8 +444,6 @@ EOF;
 		}
 	}
 
-	$buttonArray = (array) unserialize($mybb->settings['mybbfancybox_buttons']);
-
 	if (!empty($buttonArray) &&
 		count($buttonArray) > 0) {
 		$buttons = "'".implode("','", $buttonArray)."'";
@@ -478,6 +479,10 @@ EOF;
 		infobar: {$infobar},
 		arrows: {$arrows},
 		thumbs: {$thumbs},{$buttons}{$afterLoadScript}
+		btnTpl: {
+			minimize:
+			'<button data-fancybox-minimize class="fancybox-button fancybox-button--minimise" title="{{MINIMIZE}}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 445 445"><g fill="#010002"><path d="M440.3 4.7a15.9 15.9 0 0 0-22.5 0L286 136.5V47.7a16 16 0 0 0-31.7 0V175l1.2 6 3.3 5 .1.2h.2l5 3.4 6 1.2h127.2a16 16 0 0 0 0-31.8h-88.8L440.3 27.2a16 16 0 0 0 0-22.5zM180.9 255.5l-6-1.2H47.6a16 16 0 0 0 0 31.8h88.7L4.7 417.8A15.9 15.9 0 1 0 27 440.3L159 308.5v88.8a16 16 0 0 0 31.8 0V270.2l-1.2-6a16 16 0 0 0-8.6-8.7z"/></g></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 381.4 381.4"><path d="M380.1 9.8c-1.6-3.9-4.7-7-8.5-8.6L365.5 0h-159a16 16 0 0 0 0 31.8h120.6L31.8 327V206.6a15.9 15.9 0 0 0-31.8 0v159l1.2 6 3.3 5 .1.1.2.1 5 3.4 6 1.2h159a16 16 0 0 0 0-31.8H54.3L349.6 54.3v120.5a16 16 0 0 0 31.8 0v-159l-1.3-6z" fill="#010002"/></svg></button>'
+		}
 	});
 	// -->
 	</script>
@@ -592,4 +597,3 @@ function mybbfancybox_print_peekers($peekers)
 
 	return $peekers;
 }
-

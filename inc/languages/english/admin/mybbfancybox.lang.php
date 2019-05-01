@@ -65,4 +65,5 @@ $l['mybbfancybox_button_thumbs_title'] = 'Thumbnails';
 $l['mybbfancybox_button_share_title'] = 'Share';
 $l['mybbfancybox_button_download_title'] = 'Download';
 $l['mybbfancybox_button_zoom_title'] = 'Zoom';
+$l['mybbfancybox_button_minimize_title'] = 'Minimize';
 $l['mybbfancybox_button_close_title'] = 'Close';

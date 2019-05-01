@@ -35,7 +35,6 @@ var MyBBFancyBox = (function($, m) {
 			hideOnClose: true,
 		},
 		buttons: [
-			'minimize', // this is needed for the new feature - display only when setting in ACP is enabled
 			'slideShow',
 			'fullScreen',
 			'thumbs',
@@ -52,6 +51,20 @@ var MyBBFancyBox = (function($, m) {
 	 * @return void
 	 */
 	function init() {
+		if (options.buttons.indexOf("minimize") !== -1) {
+			var yState = $('body').css('overflow-y');
+
+			// Add click event for minimize button
+			$(document).on('click', '[data-fancybox-minimize]', function() {
+				var fb = $.fancybox.getInstance();
+
+				if (fb) {
+					fb.$refs.container.toggleClass('minimized');
+					$('body').css('overflow-y', (fb.$refs.container.hasClass('minimized')) ? yState : 'hidden');
+				}
+			});
+		}
+
 		$('.post_body img').each(function() {
 			var currentImage = $(this);
 			var pid = currentImage.parents('.post_body.scaleimages').attr('id');
