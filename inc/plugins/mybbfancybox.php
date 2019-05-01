@@ -4,7 +4,7 @@
  * MyBB FancyBox - plugin for MyBB 1.8.x forum software
  *
  * @package MyBB Plugin
- * @author MyBB Group - Eldenroot & Wildcard - <eldenroot@gmail.com>
+ * @author MyBB Group - Eldenroot & Wildcard & effone} - <eldenroot@gmail.com>
  * @copyright 2019 MyBB Group <http://mybb.group>
  * @link <https://github.com/mybbgroup/MyBB_Fancybox>
  * @license GPL-3.0
@@ -57,7 +57,7 @@ function mybbfancybox_info()
 		"name"			=> $lang->mybbfancybox,
 		"description"	=> $lang->mybbfancybox_description,
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"author"		=> "MyBB Group (Eldenroot & Wildcard)",
+		"author"		=> "MyBB Group (Eldenroot & Wildcard & effone)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"version"		=> "1.0.0dev",
 		"codename"		=> "mybbfancybox",
@@ -205,7 +205,7 @@ function mybbfancybox_install()
 		'name'			=> 'mybbfancybox_watermark_low_resolution_images',
 		'title'			=> $lang->mybbfancybox_watermark_low_resolution_images_title,
 		'description'	=> $lang->mybbfancybox_watermark_low_resolution_images_description,
-		'optionscode'	=> 'yesno', // Exclude low resolution images from adding watermark
+		'optionscode'	=> 'yesno',
 		'value'			=> '0',
 		'disporder'		=> '6',
 		'gid'			=> $gid
@@ -227,7 +227,7 @@ function mybbfancybox_install()
 		'name'			=> 'mybbfancybox_loop',
 		'title'			=> $lang->mybbfancybox_loop_title,
 		'description'	=> $lang->mybbfancybox_loop_description,
-		'optionscode'	=> 'yesno', // false or true value
+		'optionscode'	=> 'yesno',
 		'value'			=> '1',
 		'disporder'		=> '8',
 		'gid'			=> $gid
@@ -238,7 +238,7 @@ function mybbfancybox_install()
 		'name'			=> 'mybbfancybox_infobar',
 		'title'			=> $lang->mybbfancybox_infobar_title,
 		'description'	=> $lang->mybbfancybox_infobar_description,
-		'optionscode'	=> 'yesno', // false or true value
+		'optionscode'	=> 'yesno',
 		'value'			=> '1',
 		'disporder'		=> '9',
 		'gid'			=> $gid
@@ -249,7 +249,7 @@ function mybbfancybox_install()
 		'name'			=> 'mybbfancybox_arrows',
 		'title'			=> $lang->mybbfancybox_arrows_title,
 		'description'	=> $lang->mybbfancybox_arrows_description,
-		'optionscode'	=> 'yesno', // false or true value
+		'optionscode'	=> 'yesno',
 		'value'			=> '1',
 		'disporder'		=> '10',
 		'gid'			=> $gid
@@ -260,7 +260,7 @@ function mybbfancybox_install()
 		'name'			=> 'mybbfancybox_thumbs',
 		'title'			=> $lang->mybbfancybox_thumbs_title,
 		'description'	=> $lang->mybbfancybox_thumbs_description,
-		'optionscode'	=> 'yesno', // false or true value
+		'optionscode'	=> 'yesno',
 		'value'			=> '0',
 		'disporder'		=> '11',
 		'gid'			=> $gid
