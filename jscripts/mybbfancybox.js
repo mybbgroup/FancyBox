@@ -54,7 +54,7 @@ var MyBBFancyBox = (function($, m) {
 	 */
 	function init() {
 		
-		if (options.buttons.indexOf("minimize") !== -1) {
+		if (options.buttons && options.buttons.indexOf("minimize") !== -1) {
 			var yState = $('body').css('overflow-y');
 			// Add click event for minimize button
 			$(document).on('click', '[data-fancybox-minimize]', function() {
