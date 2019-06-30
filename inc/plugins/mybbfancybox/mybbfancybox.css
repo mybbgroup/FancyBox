@@ -26,12 +26,18 @@
 
 /** FancyBox - minimize feature **/
 .minimized {
-	height: 44px;
+	height: 44px !important;
 }
 
 .minimized .fancybox-stage,
 .minimized .fancybox-navigation {
 	display: none;
+}
+
+.minimized .fancybox-caption__body {
+	margin-bottom: -13px;
+	font-size: 13px;
+	opacity: 0.95;
 }
 
 .fancybox-button--minimise svg {
