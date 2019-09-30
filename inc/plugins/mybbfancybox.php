@@ -561,6 +561,10 @@ function mybbfancybox_post($message)
 	$find = '/(.*)href="(.*)('.$regx.')"([^>])*?>([^<]*)?<\/a>/';
 
 	// Open image URL link in MyBB FancyBox modal window
+	if (!isset($post['pid'])) {
+    		$post['pid'] = 0;
+	}
+
 	$replace = '$1href="$2$3" data-fancybox="data-'.$post['pid'].'" data-type="image" data-caption="$5"$4>$5</a>';
 
 	$message = preg_replace($find, $replace, $message);
