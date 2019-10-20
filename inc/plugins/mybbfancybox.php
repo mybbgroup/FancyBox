@@ -139,7 +139,7 @@ function mybbfancybox_install()
 		'title'			=> $lang->mybbfancybox_settings_group_title,
 		'description'	=> $lang->mybbfancybox_settings_group_description,
 		'disporder'		=> '1',
-		'isdefault'		=> 'no'
+		'isdefault'		=> 0,
 	);
 	$db->insert_query('settinggroups', $setting_group);
 	$gid = (int) $db->insert_id();
