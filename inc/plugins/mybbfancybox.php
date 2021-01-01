@@ -511,6 +511,8 @@ function mybbfancybox_post($message)
 
 	global $mybb, $post;
 
+	if (empty($post)) return $message;
+
 	// If null, then it has not yet been built
 	if ($allowedExtensions === null) {
 		// Set to an empty array so we don't try to build it again if setting is blank/errored
