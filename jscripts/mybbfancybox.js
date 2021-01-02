@@ -56,14 +56,12 @@ var MyBBFancyBox = (function($, m) {
 	function init() {
 		
 		if (options.buttons && options.buttons.indexOf("minimize") !== -1) {
-			var yState = $('body').css('overflow-y');
 			// Add click event for minimize button
 			$(document).on('click', '[data-fancybox-minimize]', function() {
 				var fb = $.fancybox.getInstance();
 
 				if (fb) {
 					fb.$refs.container.toggleClass('minimized');
-					$('body').css('overflow-y', (fb.$refs.container.hasClass('minimized')) ? yState : 'hidden');
 				}
 			});
 		}
