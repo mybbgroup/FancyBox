@@ -9,6 +9,7 @@ FancyBox JavaScript library for presenting images in a fancy way, no more openin
 - MyBB support thread: https://community.mybb.com/thread-219143.html or feel free to create a ticket on GitHub
 
 ## Authors and credits:
+- Laird - for a great help with coding, fixing bugs and adding new features in MyBB FanxyBox
 - Wildcard - for a great help with coding and fixing bugs in MyBB FanxyBox
 - effone - for a lot of useful tips and fixes
 - iAndrew - for a working sample code for external image URLs support in FancyBox
