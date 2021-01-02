@@ -1,0 +1,2 @@
+[02-Jan-2021 14:47:27 UTC] PHP Notice:  Undefined variable: regx in /data/scratch/fancybox-regex-test.php on line 3
+[02-Jan-2021 14:55:22 UTC] PHP Warning:  preg_match(): Compilation failed: subpattern name expected at offset 15 in /data/scratch/fancybox-regex-test.php on line 8

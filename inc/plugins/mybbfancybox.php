@@ -571,19 +571,24 @@ function mybbfancybox_post($message)
 
 	// Default
 	if (!$regx) {
-		$regx = 'png|gif|jpeg|bmp|jpg|apng:\/\/[^ ]+';
+		$regx = 'png|gif|jpeg|bmp|jpg|apng://[^ ]+';
 	}
 
 	// Search for image extension in URL link
-	$find = '/(.*)href="(.*)('.$regx.')"([^>])*?>([^<]*)?<\/a>/';
+	$find = '(<a\\s+([^>]*)(?<=\\s)href="([^"]*\\.(?:'.$regx.'))"([^>]*)?>(.*)?</a>)s';
 
 	$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{$post['pid']}" : 'gallery';
 
-	// Open image URL link in MyBB FancyBox modal window
-	$replace = '$1href="$2$3" data-fancybox="'.$gallerystr.'" data-type="image" data-caption="$5"$4>$5</a>';
+	// For safety, ensure that if something goes wrong and we end up with
+	// an empty message, then we restore the original one.
+	$message_old = $message;
 
-	$message = preg_replace($find, $replace, $message);
-	return $message;
+	// Open image URL link in MyBB FancyBox modal window
+	$message = preg_replace_callback($find, function ($matches) use($gallerystr) {
+		return '<a '.$matches[1].'href="'.$matches[2].'"'.$matches[3].' data-fancybox="'.$gallerystr.'" data-type="image" data-caption="'.htmlspecialchars_uni($matches[4]).'">'.$matches[4].'</a>';
+	}, $message);
+
+	return $message ? $message : $message_old;
 }
 
 	/** ACP **/
