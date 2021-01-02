@@ -24,6 +24,7 @@ var MyBBFancyBox = (function($, m) {
 		MINIMIZE: 'Minimize',
 	},
 	options = {
+		perpostgallery: true,
 		slideClass: '',
 		closeExisting: true,
 		loop: true,
@@ -69,9 +70,10 @@ var MyBBFancyBox = (function($, m) {
 
 		$('.post_body img').each(function() {
 			var currentImage = $(this);
-			var pid = currentImage.parents('.post_body.scaleimages').attr('id');
 			if (currentImage.hasClass('smilie') == false && currentImage.parent().is('a') == false) {
-				currentImage.wrap("<a title='" + lang.clickToEnlarge + "' target='_blank' data-fancybox='" + pid + "' data-type='image' href='" + currentImage.attr("src")  + "'>");
+				var pid = currentImage.parents('.post_body.scaleimages').attr('id').split('_')[1];
+				var gallerystr = options.perpostgallery ? ('data-' + pid) : 'gallery';
+				currentImage.wrap("<a title='" + lang.clickToEnlarge + "' target='_blank' data-fancybox='" + gallerystr + "' data-type='image' href='" + currentImage.attr("src")  + "'>");
 			}
 		});
 

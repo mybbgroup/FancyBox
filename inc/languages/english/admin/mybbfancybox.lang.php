@@ -40,6 +40,9 @@ $l['mybbfancybox_watermark_low_resolution_images_description'] = 'YES to enable 
 $l['mybbfancybox_watermark_resolutions_title'] = 'Low resolution image dimensions';
 $l['mybbfancybox_watermark_resolutions_description'] = 'Enter the maximum dimensions in pixels that an image will be considered as low resolution<br />width|height eg. 300|300 (default)<br />(This setting has no affect if the above setting is set to NO)';
 
+$l['mybbfancybox_per_post_gallery_title'] = 'Per-post gallery?';
+$l['mybbfancybox_per_post_gallery_description'] = 'YES (default) for each post to have its own gallery, NO for a global gallery for all posts on the page';
+
 $l['mybbfancybox_loop_title'] = 'Enable infinite gallery navigation?';
 $l['mybbfancybox_loop_description'] = 'YES (default) to enable infinite navigation between images in the gallery, NO to disable';
 
