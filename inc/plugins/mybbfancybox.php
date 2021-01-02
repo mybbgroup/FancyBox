@@ -224,12 +224,23 @@ function mybbfancybox_install()
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_per_post_gallery',
+		'title'			=> $lang->mybbfancybox_per_post_gallery_title,
+		'description'	=> $lang->mybbfancybox_per_post_gallery_description,
+		'optionscode'	=> 'yesno',
+		'value'			=> '1',
+		'disporder'		=> '8',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
 		'name'			=> 'mybbfancybox_loop',
 		'title'			=> $lang->mybbfancybox_loop_title,
 		'description'	=> $lang->mybbfancybox_loop_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '1',
-		'disporder'		=> '8',
+		'disporder'		=> '9',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -240,7 +251,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_infobar_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '1',
-		'disporder'		=> '9',
+		'disporder'		=> '10',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -251,7 +262,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_arrows_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '1',
-		'disporder'		=> '10',
+		'disporder'		=> '11',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -262,7 +273,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_thumbs_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '0',
-		'disporder'		=> '11',
+		'disporder'		=> '12',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -273,7 +284,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_minimize_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '1',
-		'disporder'		=> '12',
+		'disporder'		=> '13',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -299,7 +310,7 @@ EOF;
 		'description'	=> $lang->mybbfancybox_buttons_description,
 		'optionscode'	=> $db->escape_string($buttonSetting),
 		'value'			=> $db->escape_string(serialize(array('slideShow', 'fullScreen', 'thumbs', 'share', 'download', 'zoom', 'close'))),
-		'disporder'		=> '13',
+		'disporder'		=> '14',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -388,11 +399,13 @@ function mybbfancybox_showthread_start()
 		$lang->load('mybbfancybox');
 	}
 
+	$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{\$post['pid']}" : 'gallery';
+
 	// Apply required changes in postbit_attachments_thumbnails_thumbnail template (replace all content)
-	$templates->cache['postbit_attachments_thumbnails_thumbnail'] = '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="data-{$post[\'pid\']}" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>{$lang->mybbfancybox_uploaded}</b> {$attachdate} - <b>{$lang->mybbfancybox_views}</b> {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
+	$templates->cache['postbit_attachments_thumbnails_thumbnail'] = '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="'.$gallerystr.'" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>{$lang->mybbfancybox_uploaded}</b> {$attachdate} - <b>{$lang->mybbfancybox_views}</b> {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
 
 	// Apply required changes in postbit_attachments_images_image template (replace all content)
-	$templates->cache['postbit_attachments_images_image'] = '<a href="attachment.php?aid={$attachment[\'aid\']}" target="_blank" data-fancybox="data-{$attachment[\'pid\']}" data-type="image" ><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
+	$templates->cache['postbit_attachments_images_image'] = '<a href="attachment.php?aid={$attachment[\'aid\']}" target="_blank" data-fancybox="'.$gallerystr.'" data-type="image" ><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
 
 	$buttonArray = (array) unserialize($mybb->settings['mybbfancybox_buttons']);
 
@@ -408,6 +421,7 @@ function mybbfancybox_showthread_start()
 		'mybbfancybox_infobar' => 'infobar',
 		'mybbfancybox_arrows' => 'arrows',
 		'mybbfancybox_thumbs' => 'thumbs',
+		'mybbfancybox_per_post_gallery' => 'perpostgallery',
 	) as $key => $var) {
 		$$var = $mybb->settings[$key] ? 'true' : 'false';
 	}
@@ -479,6 +493,7 @@ EOF;
 		ZOOM: "{$lang->mybbfancybox_zoom}",
 		MINIMIZE: "{$lang->mybbfancybox_minimize}",
 	}, {
+		perpostgallery: {$perpostgallery},
 		protect: {$protect},
 		loop: {$loop},
 		infobar: {$infobar},
@@ -562,8 +577,10 @@ function mybbfancybox_post($message)
 	// Search for image extension in URL link
 	$find = '/(.*)href="(.*)('.$regx.')"([^>])*?>([^<]*)?<\/a>/';
 
+	$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{$post['pid']}" : 'gallery';
+
 	// Open image URL link in MyBB FancyBox modal window
-	$replace = '$1href="$2$3" data-fancybox="data-'.$post['pid'].'" data-type="image" data-caption="$5"$4>$5</a>';
+	$replace = '$1href="$2$3" data-fancybox="'.$gallerystr.'" data-type="image" data-caption="$5"$4>$5</a>';
 
 	$message = preg_replace($find, $replace, $message);
 	return $message;
