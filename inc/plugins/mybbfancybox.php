@@ -498,7 +498,10 @@ EOF;
 		loop: {$loop},
 		infobar: {$infobar},
 		arrows: {$arrows},
-		thumbs: {$thumbs},{$buttons}{$afterLoadScript}
+		thumbs: {
+			autoStart: {$thumbs},
+			hideOnClose: true
+		},{$buttons}{$afterLoadScript}
 		btnTpl: {
 			minimize:
 			'<button data-fancybox-minimize class="fancybox-button fancybox-button--minimise" title="{{MINIMIZE}}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 445 445"><g fill="#010002"><path d="M440.3 4.7a15.9 15.9 0 0 0-22.5 0L286 136.5V47.7a16 16 0 0 0-31.7 0V175l1.2 6 3.3 5 .1.2h.2l5 3.4 6 1.2h127.2a16 16 0 0 0 0-31.8h-88.8L440.3 27.2a16 16 0 0 0 0-22.5zM180.9 255.5l-6-1.2H47.6a16 16 0 0 0 0 31.8h88.7L4.7 417.8A15.9 15.9 0 1 0 27 440.3L159 308.5v88.8a16 16 0 0 0 31.8 0V270.2l-1.2-6a16 16 0 0 0-8.6-8.7z"/></g></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 381.4 381.4"><path d="M380.1 9.8c-1.6-3.9-4.7-7-8.5-8.6L365.5 0h-159a16 16 0 0 0 0 31.8h120.6L31.8 327V206.6a15.9 15.9 0 0 0-31.8 0v159l1.2 6 3.3 5 .1.1.2.1 5 3.4 6 1.2h159a16 16 0 0 0 0-31.8H54.3L349.6 54.3v120.5a16 16 0 0 0 31.8 0v-159l-1.3-6z" fill="#010002"/></svg></button>'
@@ -578,6 +581,10 @@ function mybbfancybox_post($message)
 	$find = '(<a\\s+([^>]*)(?<=\\b)href="([^"]*\\.(?:'.$regx.'))"([^>]*)>(.*?)</a>)s';
 
 	$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{$post['pid']}" : 'gallery';
+
+	if (!$mybb->settings['mybbfancybox_include_images_from_urls_into_gallery']) {
+		$gallerystr .= '-post-url';
+	}
 
 	// For safety, ensure that if something goes wrong and we end up with
 	// an empty message, then we restore the original one.
