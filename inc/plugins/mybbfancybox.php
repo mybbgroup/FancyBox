@@ -575,7 +575,7 @@ function mybbfancybox_post($message)
 	}
 
 	// Search for image extension in URL link
-	$find = '(<a\\s+([^>]*)(?<=\\s)href="([^"]*\\.(?:'.$regx.'))"([^>]*)>(.*?)</a>)s';
+	$find = '(<a\\s+([^>]*)(?<=\\b)href="([^"]*\\.(?:'.$regx.'))"([^>]*)>(.*?)</a>)s';
 
 	$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{$post['pid']}" : 'gallery';
 
