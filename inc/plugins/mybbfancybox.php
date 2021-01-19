@@ -347,7 +347,7 @@ function mybbfancybox_uninstall()
 	update_theme_stylesheet_list(1, false, true);
 
 	// Delete plugin settings in ACP
-	$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name LIKE 'mybbfancybox_%'");
+	$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name LIKE 'mybbfancybox\\_%'");
 	$db->write_query("DELETE FROM ".TABLE_PREFIX."settinggroups WHERE name = 'mybbfancybox'");
 
 	// Rebuild settings
