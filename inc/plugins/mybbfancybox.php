@@ -347,7 +347,7 @@ function mybbfancybox_uninstall()
 	update_theme_stylesheet_list(1, false, true);
 
 	// Delete plugin settings in ACP
-	$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name IN ('mybbfancybox_open_image_urls','mybbfancybox_allowed_extensions','mybbfancybox_include_images_from_urls_into_gallery','mybbfancybox_protect_images','mybbfancybox_watermark','mybbfancybox_watermark_low_resolution_images','mybbfancybox_watermark_resolutions','mybbfancybox_loop','mybbfancybox_infobar','mybbfancybox_arrows','mybbfancybox_thumbs','mybbfancybox_minimize','mybbfancybox_buttons')");
+	$db->write_query("DELETE FROM ".TABLE_PREFIX."settings WHERE name LIKE 'mybbfancybox_%'");
 	$db->write_query("DELETE FROM ".TABLE_PREFIX."settinggroups WHERE name = 'mybbfancybox'");
 
 	// Rebuild settings
