@@ -59,7 +59,7 @@ function mybbfancybox_info()
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"author"		=> "MyBB Group (Eldenroot & Wildcard & effone & Laird)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "1.1.0",
+		"version"		=> "1.1.1",
 		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
