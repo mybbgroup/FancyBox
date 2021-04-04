@@ -38,7 +38,7 @@ if (!defined("IN_MYBB")) {
 	die("Direct initialization of this file is not allowed.");
 }
 
-	/** Installation & info **/
+/** Installation & info **/
 
 /**
  * Plugin information
@@ -59,7 +59,7 @@ function mybbfancybox_info()
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
 		"author"		=> "MyBB Group (Eldenroot & Wildcard & effone & Laird)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "1.1.1",
+		"version"		=> "1.1.2",
 		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
@@ -380,7 +380,7 @@ function mybbfancybox_init()
 		$plugins->add_hook("parse_message_end","mybbfancybox_post");
 	}
 
-	if (THIS_SCRIPT == 'showthread.php') {
+	if (defined('THIS_SCRIPT') && THIS_SCRIPT == 'showthread.php') {
 		// Add hook
 		$plugins->add_hook('showthread_start', 'mybbfancybox_showthread_start');
 	}
