@@ -354,6 +354,18 @@ function mybbfancybox_uninstall()
 	rebuild_settings();
 }
 
+function mybbfancybox_activate()
+{
+	require_once MYBB_ROOT . "/inc/adminfunctions_templates.php";
+	find_replace_templatesets('portal_announcement', "#" . preg_quote('<p>') . "#i", '<p class="post_body scaleimages" id="pid_{$announcement[\'pid\']}">');
+}
+
+function mybbfancybox_deactivate()
+{
+	require_once MYBB_ROOT . "/inc/adminfunctions_templates.php";
+	find_replace_templatesets('portal_announcement', "#" . preg_quote('<p class="post_body scaleimages" id="pid_{$announcement[\'pid\']}">') . "#i", '<p>');
+}
+
 	/** Forum **/
 
 mybbfancybox_init();
@@ -382,7 +394,12 @@ function mybbfancybox_init()
 
 	if (defined('THIS_SCRIPT') && THIS_SCRIPT == 'showthread.php') {
 		// Add hook
-		$plugins->add_hook('showthread_start', 'mybbfancybox_showthread_start');
+		$plugins->add_hook('showthread_start', 'mybbfancybox_start');
+	}
+
+	if (defined('THIS_SCRIPT') && THIS_SCRIPT == 'portal.php') {
+		// Add hook
+		$plugins->add_hook('portal_start', 'mybbfancybox_start');
 	}
 }
 
@@ -391,7 +408,7 @@ function mybbfancybox_init()
  *
  * @return void
  */
-function mybbfancybox_showthread_start()
+function mybbfancybox_start()
 {
 	global $mybb, $templates, $headerinclude, $lang;
 
@@ -399,7 +416,11 @@ function mybbfancybox_showthread_start()
 		$lang->load('mybbfancybox');
 	}
 
-	$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{\$post['pid']}" : 'gallery';
+	if (defined('THIS_SCRIPT') && THIS_SCRIPT == 'portal.php') {
+		$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{\$announcement['pid']}" : 'gallery';
+	} else {
+		$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{\$post['pid']}" : 'gallery';
+	}
 
 	// Apply required changes in postbit_attachments_thumbnails_thumbnail template (replace all content)
 	$templates->cache['postbit_attachments_thumbnails_thumbnail'] = '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="'.$gallerystr.'" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>{$lang->mybbfancybox_uploaded}</b> {$attachdate} - <b>{$lang->mybbfancybox_views}</b> {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13{$lang->mybbfancybox_uploaded} {$attachdate}&#13{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
@@ -411,7 +432,7 @@ function mybbfancybox_showthread_start()
 
 	// Minimize button - load JS code only when enabled in ACP
 	$minimize = '';
-	
+
 	if ($mybb->settings['mybbfancybox_minimize'] == 1) {
 		array_splice($buttonArray, count($buttonArray)-1, 0, 'minimize');
 	}
