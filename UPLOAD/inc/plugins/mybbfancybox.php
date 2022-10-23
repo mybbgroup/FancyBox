@@ -417,7 +417,7 @@ function mybbfancybox_start()
 	}
 
 	if (defined('THIS_SCRIPT') && THIS_SCRIPT == 'portal.php') {
-		$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{\$announcement['tid']}" : 'gallery';
+		$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{\$announcement['pid']}" : 'gallery';
 	} else {
 		$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{\$post['pid']}" : 'gallery';
 	}
