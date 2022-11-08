@@ -34,6 +34,9 @@ $l['mybbfancybox_protect_images_description'] = 'YES to disable right-click and 
 $l['mybbfancybox_watermark_title'] = 'Display watermark in images?';
 $l['mybbfancybox_watermark_description'] = 'YES to enable watermark overlay for images, NO (default) to disable';
 
+$l['mybbfancybox_watermark_image_title'] = 'Path to watermark image';
+$l['mybbfancybox_watermark_image_description'] = 'Define the path to your watermark image, default: images/mybbfancybox/watermark.png';
+
 $l['mybbfancybox_watermark_low_resolution_images_title'] = 'Display watermark for low resolution images?';
 $l['mybbfancybox_watermark_low_resolution_images_description'] = 'YES to enable watermark overlay for small resolution images, NO (default) to disable<br />(This setting has no affect if the above setting is set to NO)';
 
