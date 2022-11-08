@@ -202,12 +202,23 @@ function mybbfancybox_install()
 	$db->insert_query('settings', $mybbfancybox_setting);
 
 	$mybbfancybox_setting = array(
+		'name'			=> 'mybbfancybox_watermark_image',
+		'title'			=> $lang->mybbfancybox_watermark_image_title,
+		'description'	=> $lang->mybbfancybox_watermark_image_description,
+		'optionscode'	=> 'text',
+		'value'			=> 'images/mybbfancybox/watermark.png',
+		'disporder'		=> '6',
+		'gid'			=> $gid
+	);
+	$db->insert_query('settings', $mybbfancybox_setting);
+
+	$mybbfancybox_setting = array(
 		'name'			=> 'mybbfancybox_watermark_low_resolution_images',
 		'title'			=> $lang->mybbfancybox_watermark_low_resolution_images_title,
 		'description'	=> $lang->mybbfancybox_watermark_low_resolution_images_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '0',
-		'disporder'		=> '6',
+		'disporder'		=> '7',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -218,7 +229,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_watermark_resolutions_description,
 		'optionscode'	=> 'text',
 		'value'			=> '300|300',
-		'disporder'		=> '7',
+		'disporder'		=> '8',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -229,7 +240,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_per_post_gallery_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '1',
-		'disporder'		=> '8',
+		'disporder'		=> '9',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -240,7 +251,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_loop_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '1',
-		'disporder'		=> '9',
+		'disporder'		=> '10',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -251,7 +262,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_infobar_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '1',
-		'disporder'		=> '10',
+		'disporder'		=> '11',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -262,7 +273,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_arrows_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '1',
-		'disporder'		=> '11',
+		'disporder'		=> '12',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -273,7 +284,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_thumbs_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '0',
-		'disporder'		=> '12',
+		'disporder'		=> '13',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -284,7 +295,7 @@ function mybbfancybox_install()
 		'description'	=> $lang->mybbfancybox_minimize_description,
 		'optionscode'	=> 'yesno',
 		'value'			=> '1',
-		'disporder'		=> '13',
+		'disporder'		=> '14',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -310,7 +321,7 @@ EOF;
 		'description'	=> $lang->mybbfancybox_buttons_description,
 		'optionscode'	=> $db->escape_string($buttonSetting),
 		'value'			=> $db->escape_string(serialize(array('slideShow', 'fullScreen', 'thumbs', 'share', 'download', 'zoom', 'close'))),
-		'disporder'		=> '14',
+		'disporder'		=> '15',
 		'gid'			=> $gid
 	);
 	$db->insert_query('settings', $mybbfancybox_setting);
@@ -454,7 +465,7 @@ function mybbfancybox_start()
 		$$var = $mybb->settings[$key] ? true : false;
 	}
 
-	$afterLoadScript = '';
+	$afterLoadScript = $watermarkStyleSheet = '';
 	if ($protect &&
 		$watermark) {
 		$watermark = '';
@@ -481,6 +492,21 @@ EOF;
 		},
 EOF;
 			}
+		}
+
+		if(!empty($mybb->settings['mybbfancybox_watermark_image']) &&
+			@getimagesize($mybb->settings['mybbfancybox_watermark_image'])) {
+
+			$watermarkimage = $mybb->settings['mybbfancybox_watermark_image'];
+
+			$watermarkStyleSheet = <<<EOF
+
+	<style type="text/css">
+		.fancybox-slide.watermark .fancybox-spaceball {
+			background-image: url('{$watermarkimage}');
+		}
+	</style>
+EOF;
 		}
 	}
 
@@ -530,6 +556,7 @@ EOF;
 	});
 	// -->
 	</script>
+	{$watermarkStyleSheet}
 EOF;
 
 }
@@ -647,10 +674,13 @@ function mybbfancybox_print_peekers($peekers)
 	global $mybb;
 
 	// Protect controls: watermark and watermark for low resolution images
-	$peekers[] = 'new Peeker($(".setting_mybbfancybox_protect_images"), $("#row_setting_mybbfancybox_watermark, #row_setting_mybbfancybox_watermark_low_resolution_images, #row_setting_mybbfancybox_watermark_resolutions"), 1, true)';
+	$peekers[] = 'new Peeker($(".setting_mybbfancybox_protect_images"), $("#row_setting_mybbfancybox_watermark, #row_setting_mybbfancybox_watermark_image, #row_setting_mybbfancybox_watermark_low_resolution_images, #row_setting_mybbfancybox_watermark_resolutions"), 1, true)';
 
 	// Watermark controls: watermark low resolution dimensions
-	$peekers[] = 'new Peeker($(".setting_mybbfancybox_watermark"), $("#row_setting_mybbfancybox_watermark_low_resolution_images, #row_setting_mybbfancybox_watermark_resolutions"), 1, true)';
+	$peekers[] = 'new Peeker($(".setting_mybbfancybox_watermark"), $("#row_setting_mybbfancybox_watermark_image, #row_setting_mybbfancybox_watermark_low_resolution_images, #row_setting_mybbfancybox_watermark_resolutions"), 1, true)';
+
+	// Watermark controls: watermark low resolution images
+	$peekers[] = 'new Peeker($(".setting_mybbfancybox_watermark_low_resolution_images"), $("#row_setting_mybbfancybox_watermark_resolutions"), 1, true)';
 
 	return $peekers;
 }
