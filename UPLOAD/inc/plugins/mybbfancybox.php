@@ -57,9 +57,9 @@ function mybbfancybox_info()
 		"name"			=> $lang->mybbfancybox,
 		"description"	=> $lang->mybbfancybox_description . '<a href=\'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amount=0&business=eldenroot%40gmail.com&item_name=MyBB+Plugin+Development&no_note=1&no_shipping=1&currency_code=USD\' target=\'_blank\'><img style=\'float: right; margin-top: 5px;\' src=\'https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_pp_142x27.png\' border=\'0\' alt=\'PayPal Donate\' /></a>',
 		"website"		=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"author"		=> "MyBB Group (Eldenroot & Wildcard & effone & Laird)",
+		"author"		=> "MyBB Group (Eldenroot & Wildcard & effone & Laird & SvePu)",
 		"authorsite"	=> "https://github.com/mybbgroup/MyBB_Fancybox",
-		"version"		=> "1.1.2",
+		"version"		=> "1.2.0",
 		"codename"		=> "mybbfancybox",
 		"compatibility" => "18*"
 	);
