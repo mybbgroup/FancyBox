@@ -212,6 +212,10 @@ EOF;
 			'optionscode'	=> 'yesno',
 			'value'			=> 1
 		),
+		'rotate' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 1
+		),
 		'thumbs' => array(
 			'optionscode'	=> 'yesno',
 			'value'			=> 0
@@ -372,6 +376,7 @@ function mybbfancybox_start()
 		'mybbfancybox_loop' => 'loop',
 		'mybbfancybox_infobar' => 'infobar',
 		'mybbfancybox_arrows' => 'arrows',
+		'mybbfancybox_rotate' => 'rotate',
 		'mybbfancybox_thumbs' => 'thumbs',
 		'mybbfancybox_per_post_gallery' => 'perpostgallery',
 	) as $key => $var) {
@@ -465,6 +470,7 @@ EOF;
 		loop: {$loop},
 		infobar: {$infobar},
 		arrows: {$arrows},
+		rotate: {$rotate},
 		thumbs: {
 			autoStart: {$thumbs},
 			hideOnClose: true

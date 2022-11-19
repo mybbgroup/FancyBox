@@ -55,6 +55,9 @@ $l['setting_mybbfancybox_infobar_desc'] = 'YES (default) to display image counte
 $l['setting_mybbfancybox_arrows'] = 'Display arrows for navigation?';
 $l['setting_mybbfancybox_arrows_desc'] = 'YES (default) to display arrows at the edges of the screen for simple navigation between images, NO to hide';
 
+$l['setting_mybbfancybox_rotate'] = 'Enable image rotation?';
+$l['setting_mybbfancybox_rotate_desc'] = 'YES (default) to enable the rotation option, NO to disable';
+
 $l['setting_mybbfancybox_thumbs'] = 'Display thumbnails sidebox?';
 $l['setting_mybbfancybox_thumbs_desc'] = 'YES to automatically display thumbnails sidebox, NO (default) to hide';
 
