@@ -49,7 +49,7 @@ function mybbfancybox_info()
 {
 	global $lang;
 
-	if (!$lang->mybbfancybox) {
+	if (!isset($lang->mybbfancybox)) {
 		$lang->load('mybbfancybox');
 	}
 
@@ -87,7 +87,7 @@ function mybbfancybox_install()
 {
 	global $db, $config, $lang;
 
-	if (!$lang->mybbfancybox) {
+	if (!isset($lang->mybbfancybox)) {
 		$lang->load('mybbfancybox');
 	}
 
@@ -134,199 +134,118 @@ function mybbfancybox_install()
 
 	// Add plugin settings into ACP
 	// Add plugin settings group
+	$query = $db->simple_select('settinggroups', 'MAX(disporder) AS disporder');
+	$disporder = (int)$db->fetch_field($query, 'disporder');
+
 	$setting_group = array(
-		'name'			=> 'mybbfancybox',
-		'title'			=> $lang->mybbfancybox_settings_group_title,
-		'description'	=> $lang->mybbfancybox_settings_group_description,
-		'disporder'		=> '1',
-		'isdefault'		=> 0,
+		'name' => 'mybbfancybox',
+		"title" => $db->escape_string($lang->setting_group_mybbfancybox),
+		"description" => $db->escape_string($lang->setting_group_mybbfancybox_desc),
+		'isdefault' => 0
 	);
-	$db->insert_query('settinggroups', $setting_group);
-	$gid = (int) $db->insert_id();
 
-	// Open image URLs settings
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_open_image_urls',
-		'title'			=> $lang->mybbfancybox_open_image_urls_title,
-		'description'	=> $lang->mybbfancybox_open_image_urls_description,
-		'optionscode'	=> 'yesno',
-		'value'			=> '1',
-		'disporder'		=> '1',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
+	$setting_group['disporder'] = ++$disporder;
 
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_allowed_extensions',
-		'title'			=> $lang->mybbfancybox_allowed_extensions_title,
-		'description'	=> $lang->mybbfancybox_allowed_extensions_description,
-		'optionscode'	=> 'text',
-		'value'			=> '',
-		'disporder'		=> '2',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_include_images_from_urls_into_gallery',
-		'title'			=> $lang->mybbfancybox_include_images_from_urls_into_gallery_title,
-		'description'	=> $lang->mybbfancybox_include_images_from_urls_into_gallery_description,
-		'optionscode'	=> 'yesno',
-		'value'			=> '1',
-		'disporder'		=> '3',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	// FancyBox basic settings
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_protect_images',
-		'title'			=> $lang->mybbfancybox_protect_images_title,
-		'description'	=> $lang->mybbfancybox_protect_images_description,
-		'optionscode'	=> 'yesno',
-		'value'			=> '0',
-		'disporder'		=> '4',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark',
-		'title'			=> $lang->mybbfancybox_watermark_title,
-		'description'	=> $lang->mybbfancybox_watermark_description,
-		'optionscode'	=> 'yesno',
-		'value'			=> '0',
-		'disporder'		=> '5',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark_image',
-		'title'			=> $lang->mybbfancybox_watermark_image_title,
-		'description'	=> $lang->mybbfancybox_watermark_image_description,
-		'optionscode'	=> 'text',
-		'value'			=> 'images/mybbfancybox/watermark.png',
-		'disporder'		=> '6',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark_low_resolution_images',
-		'title'			=> $lang->mybbfancybox_watermark_low_resolution_images_title,
-		'description'	=> $lang->mybbfancybox_watermark_low_resolution_images_description,
-		'optionscode'	=> 'yesno',
-		'value'			=> '0',
-		'disporder'		=> '7',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_watermark_resolutions',
-		'title'			=> $lang->mybbfancybox_watermark_resolutions_title,
-		'description'	=> $lang->mybbfancybox_watermark_resolutions_description,
-		'optionscode'	=> 'text',
-		'value'			=> '300|300',
-		'disporder'		=> '8',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_per_post_gallery',
-		'title'			=> $lang->mybbfancybox_per_post_gallery_title,
-		'description'	=> $lang->mybbfancybox_per_post_gallery_description,
-		'optionscode'	=> 'yesno',
-		'value'			=> '1',
-		'disporder'		=> '9',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_loop',
-		'title'			=> $lang->mybbfancybox_loop_title,
-		'description'	=> $lang->mybbfancybox_loop_description,
-		'optionscode'	=> 'yesno',
-		'value'			=> '1',
-		'disporder'		=> '10',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_infobar',
-		'title'			=> $lang->mybbfancybox_infobar_title,
-		'description'	=> $lang->mybbfancybox_infobar_description,
-		'optionscode'	=> 'yesno',
-		'value'			=> '1',
-		'disporder'		=> '11',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_arrows',
-		'title'			=> $lang->mybbfancybox_arrows_title,
-		'description'	=> $lang->mybbfancybox_arrows_description,
-		'optionscode'	=> 'yesno',
-		'value'			=> '1',
-		'disporder'		=> '12',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_thumbs',
-		'title'			=> $lang->mybbfancybox_thumbs_title,
-		'description'	=> $lang->mybbfancybox_thumbs_description,
-		'optionscode'	=> 'yesno',
-		'value'			=> '0',
-		'disporder'		=> '13',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
-
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_minimize',
-		'title'			=> $lang->mybbfancybox_minimize_title,
-		'description'	=> $lang->mybbfancybox_minimize_description,
-		'optionscode'	=> 'yesno',
-		'value'			=> '1',
-		'disporder'		=> '14',
-		'gid'			=> $gid
-	);
-	$db->insert_query('settings', $mybbfancybox_setting);
+	$gid = (int)$db->insert_query('settinggroups', $setting_group);
 
 	$buttonSetting = <<<EOF
 php
 <select multiple name=\"upsetting[mybbfancybox_buttons][]\" size=\"7\">
-	<option value=\"slideShow\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("slideShow", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_slideshow_title}</option>
-	<option value=\"fullScreen\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("fullScreen", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_fullscreen_title}</option>
-	<option value=\"thumbs\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("thumbs", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_thumbs_title}</option>
-	<option value=\"share\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("share", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_share_title}</option>
-	<option value=\"download\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("download", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_download_title}</option>
-	<option value=\"zoom\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("zoom", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_zoom_title}</option>
-	<option value=\"close\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("close", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->mybbfancybox_button_close_title}</option>
+	<option value=\"slideShow\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("slideShow", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->setting_mybbfancybox_buttons_slideshow}</option>
+	<option value=\"fullScreen\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("fullScreen", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->setting_mybbfancybox_buttons_fullscreen}</option>
+	<option value=\"thumbs\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("thumbs", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->setting_mybbfancybox_buttons_thumbs}</option>
+	<option value=\"share\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("share", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->setting_mybbfancybox_buttons_share}</option>
+	<option value=\"download\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("download", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->setting_mybbfancybox_buttons_download}</option>
+	<option value=\"zoom\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("zoom", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->setting_mybbfancybox_buttons_zoom}</option>
+	<option value=\"close\" ".(is_array(unserialize(\$setting['value'])) ? (\$setting['value'] != "" && in_array("close", unserialize(\$setting['value'])) ? "selected=\"selected\"":""):"").">{$lang->setting_mybbfancybox_buttons_close}</option>
 </select>
 
 EOF;
 
-	// Settings for buttons
-	$mybbfancybox_setting = array(
-		'name'			=> 'mybbfancybox_buttons',
-		'title'			=> $lang->mybbfancybox_buttons_title,
-		'description'	=> $lang->mybbfancybox_buttons_description,
-		'optionscode'	=> $db->escape_string($buttonSetting),
-		'value'			=> $db->escape_string(serialize(array('slideShow', 'fullScreen', 'thumbs', 'share', 'download', 'zoom', 'close'))),
-		'disporder'		=> '15',
-		'gid'			=> $gid
+	// Open image URLs settings
+	$settings = array(
+		'open_image_urls' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 1
+		),
+		'allowed_extensions' => array(
+			'optionscode'	=> 'text',
+			'value'			=> ''
+		),
+		'include_images_from_urls_into_gallery' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 1
+		),
+		'protect_images' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 0
+		),
+		'watermark' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 0
+		),
+		'watermark_image' => array(
+			'optionscode'	=> 'text',
+			'value'			=> 'images/mybbfancybox/watermark.png'
+		),
+		'watermark_low_resolution_images' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 1
+		),
+		'watermark_resolutions' => array(
+			'optionscode'	=> 'text',
+			'value'			=> '300|300'
+		),
+		'per_post_gallery' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 1
+		),
+		'loop' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 1
+		),
+		'infobar' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 1
+		),
+		'arrows' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 1
+		),
+		'thumbs' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 0
+		),
+		'minimize' => array(
+			'optionscode'	=> 'yesno',
+			'value'			=> 1
+		),
+		'buttons' => array(
+			'optionscode'	=> $db->escape_string($buttonSetting),
+			'value'			=> $db->escape_string(serialize(array('slideShow', 'fullScreen', 'thumbs', 'share', 'download', 'zoom', 'close')))
+		)
 	);
-	$db->insert_query('settings', $mybbfancybox_setting);
 
-	// Rebuild settings
+	$disporder = 0;
+
+	foreach ($settings as $name => $setting)
+	{
+		$name = "mybbfancybox_{$name}";
+
+		$setting['name'] = $db->escape_string($name);
+
+		$lang_var_title = "setting_{$name}";
+		$lang_var_description = "setting_{$name}_desc";
+
+		$setting['title'] = $db->escape_string($lang->{$lang_var_title});
+		$setting['description'] = $db->escape_string($lang->{$lang_var_description});
+		$setting['disporder'] = $disporder;
+		$setting['gid'] = $gid;
+
+		$db->insert_query('settings', $setting);
+		++$disporder;
+	}
+
 	rebuild_settings();
 }
 
@@ -391,6 +310,7 @@ function mybbfancybox_init()
 	global $mybb, $plugins;
 
 	if (defined('IN_ADMINCP')) {
+		$plugins->add_hook('admin_config_settings_begin', 'mybbfancybox_admin_config_settings');
 		$plugins->add_hook('admin_config_settings_change', 'mybbfancybox_admin_config_settings_change');
 		$plugins->add_hook('admin_settings_print_peekers', 'mybbfancybox_print_peekers');
 		return;
@@ -423,7 +343,7 @@ function mybbfancybox_start()
 {
 	global $mybb, $templates, $headerinclude, $lang;
 
-	if (!$lang->mybbfancybox) {
+	if (!isset($lang->mybbfancybox)) {
 		$lang->load('mybbfancybox');
 	}
 
@@ -647,6 +567,20 @@ function mybbfancybox_post($message)
 }
 
 	/** ACP **/
+
+/**
+ * Language support
+ *
+ * @return void
+ */
+function mybbfancybox_admin_config_settings()
+{
+    global $lang;
+
+	if (!isset($lang->mybbfancybox)) {
+		$lang->load('mybbfancybox');
+	}
+}
 
 /**
  * Serialize button setting when our settings group is updated
