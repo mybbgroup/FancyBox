@@ -87,7 +87,7 @@ function mybbfancybox_install()
 {
 	global $db, $config, $lang;
 
-	if (!$lang->mybbfancybox) {
+	if (!isset($lang->mybbfancybox)) {
 		$lang->load('mybbfancybox');
 	}
 
@@ -423,7 +423,7 @@ function mybbfancybox_start()
 {
 	global $mybb, $templates, $headerinclude, $lang;
 
-	if (!$lang->mybbfancybox) {
+	if (!isset($lang->mybbfancybox)) {
 		$lang->load('mybbfancybox');
 	}
 
