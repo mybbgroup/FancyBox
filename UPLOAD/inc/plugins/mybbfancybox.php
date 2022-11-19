@@ -49,7 +49,7 @@ function mybbfancybox_info()
 {
 	global $lang;
 
-	if (!$lang->mybbfancybox) {
+	if (!isset($lang->mybbfancybox)) {
 		$lang->load('mybbfancybox');
 	}
 
