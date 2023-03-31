@@ -62,7 +62,7 @@ $l['setting_mybbfancybox_thumbs'] = 'Display thumbnails sidebox?';
 $l['setting_mybbfancybox_thumbs_desc'] = 'YES to automatically display thumbnails sidebox, NO (default) to hide';
 
 $l['setting_mybbfancybox_minimize'] = 'Enable minimize gallery?';
-$l['setting_mybbfancybox_minimize_desc'] = 'YES (default) to enable minimizing MyBB FancyBox galery, NO to disable';
+$l['setting_mybbfancybox_minimize_desc'] = 'YES (default) to enable minimizing MyBB FancyBox gallery, NO to disable';
 
 // Buttons
 $l['setting_mybbfancybox_buttons'] = 'Button Selection';
