@@ -19,14 +19,14 @@ $l['mybbfancybox_description'] = 'MyBB integration of FancyBox JavaScript librar
 $l['setting_group_mybbfancybox'] = 'MyBB FancyBox Settings';
 $l['setting_group_mybbfancybox_desc'] = 'Settings for MyBB FancyBox';
 
-$l['setting_mybbfancybox_open_image_urls'] = 'Detect image URL links?';
-$l['setting_mybbfancybox_open_image_urls_desc'] = 'YES (default) to automatically detect links to images in posts and enable them to be viewed in the MyBB FancyBox modal, NO to disable';
+$l['setting_mybbfancybox_open_image_urls'] = 'Include linked-to images?';
+$l['setting_mybbfancybox_open_image_urls_desc'] = 'YES (default) to automatically detect links (URLs) to images in posts and enable them to be viewed in the MyBB FancyBox modal, NO to disable';
 
 $l['setting_mybbfancybox_allowed_extensions'] = 'Allowed image extensions';
 $l['setting_mybbfancybox_allowed_extensions_desc'] = 'Leave blank (default) to use the default image extensions (.jpg, .gif, .png, .jpeg, .bmp, .apng) or enter a comma separated list of extensions to allow.<br />(This setting has no affect if the above setting is set to NO)';
 
-$l['setting_mybbfancybox_include_images_from_urls_into_gallery'] = 'Include images from URLs in the gallery?';
-$l['setting_mybbfancybox_include_images_from_urls_into_gallery_desc'] = 'YES (default) to include detected images from URLs in posts in the gallery, NO to disable';
+$l['setting_mybbfancybox_use_separate_gallery_for_linked_images'] = 'Create a separate gallery for linked-to images?';
+$l['setting_mybbfancybox_use_separate_gallery_for_linked_images_desc'] = 'YES for linked-to images (as URLs) to be placed into a separate gallery from other images (whether per-post or globally, depending on the below "Per-post gallery?" setting), NO (default) to put all images into the same gallery (again, whether per-post or global)';
 
 $l['setting_mybbfancybox_protect_images'] = 'Protect images?';
 $l['setting_mybbfancybox_protect_images_desc'] = 'YES to disable right-click and use simple image protection, NO (default) to enable right-click';
