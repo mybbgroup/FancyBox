@@ -172,9 +172,9 @@ EOF;
 			'optionscode'	=> 'text',
 			'value'			=> ''
 		),
-		'include_images_from_urls_into_gallery' => array(
+		'use_separate_gallery_for_linked_images' => array(
 			'optionscode'	=> 'yesno',
-			'value'			=> 1
+			'value'			=> 0
 		),
 		'protect_images' => array(
 			'optionscode'	=> 'yesno',
@@ -556,8 +556,8 @@ function mybbfancybox_post($message)
 
 	$gallerystr = $mybb->settings['mybbfancybox_per_post_gallery'] ? "data-{$post['pid']}" : 'gallery';
 
-	if (!$mybb->settings['mybbfancybox_include_images_from_urls_into_gallery']) {
-		$gallerystr .= '-post-url';
+	if ($mybb->settings['mybbfancybox_use_separate_gallery_for_linked_images']) {
+		$gallerystr .= '-links';
 	}
 
 	// For safety, ensure that if something goes wrong and we end up with
