@@ -503,7 +503,7 @@ function mybbfancybox_post($message)
 
 	global $mybb, $post;
 
-	if (empty($post)) return $message;
+	if (empty($post['pid'])) return $message;
 
 	// If null, then it has not yet been built
 	if ($allowedExtensions === null) {
