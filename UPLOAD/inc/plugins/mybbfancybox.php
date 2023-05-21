@@ -176,6 +176,10 @@ EOF;
 			'optionscode'	=> 'yesno',
 			'value'			=> 0
 		),
+		'video_filetypes' => array(
+			'optionscode'	=> 'textarea',
+			'value'			=> ''
+		),
 		'protect_images' => array(
 			'optionscode'	=> 'yesno',
 			'value'			=> 0
@@ -336,6 +340,10 @@ function mybbfancybox_init()
 		// Add hook
 		$plugins->add_hook('portal_start', 'mybbfancybox_start');
 	}
+
+	if (defined('THIS_SCRIPT') && THIS_SCRIPT == 'attachment.php') {
+		$plugins->add_hook('attachment_end', 'mybbfancybox_attachment_end');
+	}
 }
 
 /**
@@ -359,6 +367,9 @@ function mybbfancybox_start()
 
 	// Apply required changes in postbit_attachments_thumbnails_thumbnail template (replace all content)
 	$templates->cache['postbit_attachments_thumbnails_thumbnail'] = '<a href="attachment.php?aid={$attachment[\'aid\']}" data-fancybox="'.$gallerystr.'" data-type="image" data-caption="<b>{$lang->postbit_attachment_filename}</b> {$attachment[\'filename\']} - <b>{$lang->postbit_attachment_size}</b> {$attachment[\'filesize\']} - <b>{$lang->mybbfancybox_uploaded}</b> {$attachdate} - <b>{$lang->mybbfancybox_views}</b> {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}"><img src="attachment.php?thumbnail={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13;{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13;{$lang->mybbfancybox_uploaded} {$attachdate}&#13;{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
+
+	// Apply required changes to support videos in the gallery (replace all content)
+	$templates->cache['postbit_attachments_attachment'] = '<br />{$attachment[\'icon\']}&nbsp;&nbsp;<a href="attachment.php?aid={$attachment[\'aid\']}" data-filetype="{$attachment[\'filetype\']}" target="_blank" title="{$attachdate}">{$attachment[\'filename\']}</a> ({$lang->postbit_attachment_size} {$attachment[\'filesize\']} / {$lang->postbit_attachment_downloads} {$attachment[\'downloads\']})';
 
 	// Apply required changes in postbit_attachments_images_image template (replace all content)
 	$templates->cache['postbit_attachments_images_image'] = '<a href="attachment.php?aid={$attachment[\'aid\']}" target="_blank" data-fancybox="'.$gallerystr.'" data-type="image" ><img src="attachment.php?aid={$attachment[\'aid\']}" class="attachment" alt="" title="{$lang->postbit_attachment_filename} {$attachment[\'filename\']}&#13;{$lang->postbit_attachment_size} {$attachment[\'filesize\']}&#13;{$lang->mybbfancybox_uploaded} {$attachdate}&#13;{$lang->mybbfancybox_views} {$attachment[\'downloads\']}{$lang->mybbfancybox_views_symbol_after}" /></a>&nbsp;&nbsp;&nbsp;';
@@ -442,6 +453,11 @@ EOF;
 
 	$buttons = "\n\t\tbuttons: [ {$buttons} ],";
 
+	$filetypes_a = array_map('trim', explode("\n", $mybb->settings['mybbfancybox_video_filetypes']));
+	if ($filetypes_a) {
+		$video_mimetypes = '["'.implode('", "', array_map('addslashes', $filetypes_a)).'"]';
+	} else	$video_mimetypes = '[]';
+
 	$headerinclude .= <<<EOF
 
 
@@ -450,6 +466,7 @@ EOF;
 	<script type="text/javascript" src="{$mybb->asset_url}/jscripts/mybbfancybox.js"></script>
 	<script type="text/javascript">
 	<!--
+	var video_mimetypes = {$video_mimetypes};
 	MyBBFancyBox.setup({
 		clickToEnlarge: "{$lang->mybbfancybox_click_to_enlarge}",
 		CLOSE: "{$lang->mybbfancybox_close}",
@@ -623,4 +640,30 @@ function mybbfancybox_print_peekers($peekers)
 	$peekers[] = 'new Peeker($(".setting_mybbfancybox_watermark_low_resolution_images"), $("#row_setting_mybbfancybox_watermark_resolutions"), 1, true)';
 
 	return $peekers;
+}
+
+function mybbfancybox_attachment_end()
+{
+	global $mybb, $uploadspath_abs, $attachment;
+
+	if (trim($mybb->settings['mybbfancybox_video_filetypes'])
+	    &&
+	    !isset($mybb->input['thumbnail'])
+	    &&
+	    file_exists($uploadspath_abs.'/'.$attachment['attachname'])
+	) {
+		$mimetypes = array_map('trim', explode("\n", $mybb->settings['mybbfancybox_video_filetypes']));
+		if (in_array($attachment['filetype'], $mimetypes)) {
+			header("Content-type: {$filetype}");
+			header("Content-disposition: inline; filename=\"{$attachment['filename']}\"");
+			header("Content-length: {$attachment['filesize']}");
+			header("Content-range: bytes=0-".($attachment['filesize']-1).'/'.$attachment['filesize']);
+			$handle = fopen($uploadspath_abs."/".$attachment['attachname'], 'rb');
+			while (!feof($handle)) {
+				echo fread($handle, 8192);
+			}
+			fclose($handle);
+			exit;
+		}
+	}
 }

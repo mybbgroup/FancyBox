@@ -28,6 +28,9 @@ $l['setting_mybbfancybox_allowed_extensions_desc'] = 'Leave blank (default) to u
 $l['setting_mybbfancybox_use_separate_gallery_for_linked_images'] = 'Create a separate gallery for linked-to images?';
 $l['setting_mybbfancybox_use_separate_gallery_for_linked_images_desc'] = 'YES for linked-to images (as URLs) to be placed into a separate gallery from other images (whether per-post or globally, depending on the below "Per-post gallery?" setting), NO (default) to put all images into the same gallery (again, whether per-post or global)';
 
+$l['setting_mybbfancybox_video_filetypes'] = 'Video (or other) MIME types';
+$l['setting_mybbfancybox_video_filetypes_desc'] = 'Provide, one per line, a list of attachment MIME types (as specified via MyBB\'s ACP "Attachment Types" configuration) which should be included in the FancyBox gallery as well as images. Typically, these will be video attachments.';
+
 $l['setting_mybbfancybox_protect_images'] = 'Protect images?';
 $l['setting_mybbfancybox_protect_images_desc'] = 'YES to disable right-click and use simple image protection, NO (default) to enable right-click';
 
