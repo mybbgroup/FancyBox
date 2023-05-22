@@ -654,7 +654,7 @@ function mybbfancybox_attachment_end()
 	) {
 		$mimetypes = array_map('trim', explode("\n", $mybb->settings['mybbfancybox_video_filetypes']));
 		if (in_array($attachment['filetype'], $mimetypes)) {
-			header("Content-type: {$filetype}");
+			header("Content-type: {$attachment['filetype']}");
 			header("Content-disposition: inline; filename=\"{$attachment['filename']}\"");
 			header("Content-length: {$attachment['filesize']}");
 			header("Content-range: bytes=0-".($attachment['filesize']-1).'/'.$attachment['filesize']);
