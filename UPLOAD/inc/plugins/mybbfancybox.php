@@ -657,7 +657,6 @@ function mybbfancybox_attachment_end()
 			header("Content-type: {$attachment['filetype']}");
 			header("Content-disposition: inline; filename=\"{$attachment['filename']}\"");
 			header("Content-length: {$attachment['filesize']}");
-			header("Content-range: bytes=0-".($attachment['filesize']-1).'/'.$attachment['filesize']);
 			$handle = fopen($uploadspath_abs."/".$attachment['attachname'], 'rb');
 			while (!feof($handle)) {
 				echo fread($handle, 8192);
