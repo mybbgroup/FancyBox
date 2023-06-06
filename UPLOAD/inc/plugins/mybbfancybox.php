@@ -331,6 +331,8 @@ function mybbfancybox_init()
 		$plugins->add_hook("parse_message_end","mybbfancybox_post");
 	}
 
+	$plugins->add_hook('postbit', 'mybbfancybox_postbit');
+
 	if (defined('THIS_SCRIPT') && THIS_SCRIPT == 'showthread.php') {
 		// Add hook
 		$plugins->add_hook('showthread_start', 'mybbfancybox_start');
@@ -642,6 +644,42 @@ function mybbfancybox_print_peekers($peekers)
 	return $peekers;
 }
 
+function mybbfancybox_filename_to_mimetype($filename)
+{
+	global $cache;
+	static $attachtypes = null;
+
+	if (is_null($attachtypes)) {
+		$attachtypes = (array)$cache->read('attachtypes');
+	}
+	$ext = get_extension(my_strtolower($filename));
+
+	return empty($attachtypes[$ext]) ? false : $attachtypes[$ext]['mimetype'];
+}
+
+function mybbfancybox_postbit(&$post)
+{
+	global $attachcache;
+
+	// Convert the mime type stored for this attachment in the database (which
+	// is whatever it was uploaded as) into the mime type specified for
+	// attachments with this file extension in the ACP's Attachment Types
+	// settings module.
+	if (!empty($attachcache)) {
+		global $cache;
+
+		$attachtypes = (array)$cache->read('attachtypes');
+		foreach ($attachcache as &$post_attachments) {
+			foreach ($post_attachments as &$attachment) {
+				$mimetype = mybbfancybox_filename_to_mimetype($attachment['filename']);
+				if ($mimetype !== null) {
+					$attachment['filetype'] = $mimetype;
+				}
+			}
+		}
+	}
+}
+
 function mybbfancybox_attachment_end()
 {
 	global $mybb, $uploadspath_abs, $attachment;
@@ -652,10 +690,14 @@ function mybbfancybox_attachment_end()
 	    &&
 	    file_exists($uploadspath_abs.'/'.$attachment['attachname'])
 	) {
+		$mimetype = mybbfancybox_filename_to_mimetype($attachment['filename']);
+		if ($mimetype === false) {
+			return;
+		}
 		$mimetypes = array_map('trim', explode("\n", $mybb->settings['mybbfancybox_video_filetypes']));
-		if (in_array($attachment['filetype'], $mimetypes)) {
-			header("Content-type: {$attachment['filetype']}");
-			header("Content-disposition: inline; filename=\"{$attachment['filename']}\"");
+		if (in_array($mimetype, $mimetypes)) {
+			header("Content-type: {$mimetype}");
+			header("Content-disposition: inline; filename=\"".preg_replace('([\\r\\n"])', '', $attachment['filename']).'"');
 			header("Content-length: {$attachment['filesize']}");
 			$handle = fopen($uploadspath_abs."/".$attachment['attachname'], 'rb');
 			while (!feof($handle)) {
