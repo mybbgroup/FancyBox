@@ -74,7 +74,7 @@ function mybbfancybox_is_installed()
 {
 	global $db;
 
-	$query = $db->simple_select('themestylesheets', 'sid', "name='mybbfancybox.css'");
+	$query = $db->simple_select('settinggroups', 'gid', "name='mybbfancybox'");
 	return ($db->num_rows($query) > 0);
 }
 
