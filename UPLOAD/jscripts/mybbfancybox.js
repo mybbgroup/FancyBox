@@ -76,6 +76,15 @@ var MyBBFancyBox = (function ($, m) {
 			}
 		});
 
+		for (let i = 0; i < video_mimetypes.length; i++) {
+			$('.post_content a[data-filetype="'+video_mimetypes[i].replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0')+'"]').each(function () {
+				var pid = $(this).parents('.post_content').find('.scaleimages').attr('id').split('_')[1];
+				var gallerystr = options.perpostgallery ? ('data-' + pid) : 'gallery';
+				$(this).attr('data-fancybox', gallerystr);
+				$(this).attr('data-options', '{"type" : "iframe", "iframe" : {"preload" : false, "css" : {"width" : "100%", "height" : "100%"}}}' );
+			});
+		}
+
 		// Load default language ENG (English)
 		$.fancybox.defaults.lang = 'en';
 		$.fancybox.defaults.i18n.en = lang;
